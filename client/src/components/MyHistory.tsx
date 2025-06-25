@@ -91,7 +91,7 @@ export function MyHistory() {
 
   if (!account) {
     return (
-      <section className="mb-12">
+      <section className="mb-12" id='history'>
         <h2 className="text-2xl font-bold text-slate-50 mb-6 flex items-center space-x-2">
           <Medal className="h-6 w-6 text-accent-green" />
           <span>My History</span>
@@ -125,7 +125,7 @@ export function MyHistory() {
 
   return (
     <>
-      <section className="mb-12">
+      <section className="mb-12" id='history'>
         <h2 className="text-2xl font-bold text-slate-50 mb-6 flex items-center space-x-2">
           <Medal className="h-6 w-6 text-accent-green" />
           <span>My History</span>
