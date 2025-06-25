@@ -67,7 +67,7 @@ export function Dashboard() {
               <div className="text-sm">
                 <p className="text-slate-400 mb-2">Chiliz Testnet</p>
                 <p className="text-xs bg-slate-800 p-2 rounded font-mono text-slate-300 break-all">
-                  0xb413dC75Cc1f91447C7599211bfA19FE7e92A53c
+                  0xFA81A5b5a9e0ebe9194d45b47ad553EE05AeEBD7
                 </p>
               </div>
             </div>

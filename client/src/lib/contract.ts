@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { getSigner, getProvider } from './web3';
 
-export const CONTRACT_ADDRESS = '0xb413dC75Cc1f91447C7599211bfA19FE7e92A53c';
+export const CONTRACT_ADDRESS = '0xFA81A5b5a9e0ebe9194d45b47ad553EE05AeEBD7';
 
 export const CONTRACT_ABI = [
   "function owner() view returns (address)",
