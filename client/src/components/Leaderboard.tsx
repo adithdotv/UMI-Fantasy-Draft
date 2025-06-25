@@ -1,14 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
-import { apiRequest } from '@/lib/queryClient';
+import { useBlockchainLeaderboard } from '@/hooks/useContract';
+import { useWallet } from '@/hooks/useWallet';
 
 export function Leaderboard() {
-  const { data: leaderboard = [], isLoading } = useQuery({
-    queryKey: ['/api/leaderboard'],
-    queryFn: async () => {
-      const response = await apiRequest('GET', '/api/leaderboard');
-      return response.json();
-    },
-  });
+  const { data: leaderboard = [], isLoading } = useBlockchainLeaderboard();
+  const { account } = useWallet();
 
   const getAvatar = (address: string) => {
     const initials = address.slice(2, 4).toUpperCase();
@@ -76,7 +71,7 @@ export function Leaderboard() {
               {leaderboard.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-6 py-12 text-center text-slate-400">
-                    No leaderboard data available
+                    No players have won any drafts yet
                   </td>
                 </tr>
               ) : (
@@ -102,9 +97,16 @@ export function Leaderboard() {
                           <div className={`w-8 h-8 bg-gradient-to-r ${avatar.gradient} rounded-full flex items-center justify-center`}>
                             <span className="text-white font-bold text-sm">{avatar.initials}</span>
                           </div>
-                          <span className="font-medium text-slate-50">
-                            {formatAddress(player.userAddress)}
-                          </span>
+                          <div className="flex items-center space-x-2">
+                            <span className="font-medium text-slate-50">
+                              {formatAddress(player.userAddress)}
+                            </span>
+                            {account && player.userAddress.toLowerCase() === account.toLowerCase() && (
+                              <span className="bg-accent-green/20 text-accent-green px-2 py-1 rounded text-xs font-medium">
+                                You
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 text-slate-50 font-semibold">{player.totalWins}</td>
