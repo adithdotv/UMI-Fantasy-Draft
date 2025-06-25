@@ -2,6 +2,7 @@ import { Header } from '@/components/Header';
 import { HeroSection } from '@/components/HeroSection';
 import { DraftStats } from '@/components/DraftStats';
 import { ActiveDrafts } from '@/components/ActiveDrafts';
+import { MyHistory } from '@/components/MyHistory';
 import { Leaderboard } from '@/components/Leaderboard';
 import { AdminPanel } from '@/components/AdminPanel';
 import { useWallet } from '@/hooks/useWallet';
@@ -31,6 +32,7 @@ export function Dashboard() {
         )}
         
         <ActiveDrafts />
+        <MyHistory />
         <Leaderboard />
       </main>
 
