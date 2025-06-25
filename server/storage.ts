@@ -78,12 +78,101 @@ export class MemStorage implements IStorage {
 
     // Initialize with mock players
     this.initializePlayers();
+    // Initialize with sample drafts
+    this.initializeSampleDrafts();
+    // Initialize with sample leaderboard
+    this.initializeSampleLeaderboard();
   }
 
   private initializePlayers() {
     mockPlayers.forEach(player => {
       const id = this.playerCurrentId++;
       this.players.set(id, { ...player, id });
+    });
+  }
+
+  private initializeSampleDrafts() {
+    // Create sample active drafts
+    const sampleDrafts = [
+      {
+        contractId: 1,
+        name: "Champions League Fantasy",
+        description: "Pick your dream team for the Champions League knockout stage",
+        entryFee: "25",
+        deadline: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours from now
+        isActive: true,
+        totalPool: "250",
+        participants: 10,
+        maxParticipants: 100,
+      },
+      {
+        contractId: 2,
+        name: "Premier League Elite",
+        description: "Elite fantasy league for Premier League matchday",
+        entryFee: "25",
+        deadline: new Date(Date.now() + 48 * 60 * 60 * 1000), // 48 hours from now
+        isActive: true,
+        totalPool: "500",
+        participants: 20,
+        maxParticipants: 100,
+      },
+      {
+        contractId: 3,
+        name: "Weekend Warriors",
+        description: "Quick draft for weekend matches",
+        entryFee: "25",
+        deadline: new Date(Date.now() + 12 * 60 * 60 * 1000), // 12 hours from now
+        isActive: true,
+        totalPool: "150",
+        participants: 6,
+        maxParticipants: 50,
+      }
+    ];
+
+    sampleDrafts.forEach(draft => {
+      const id = this.draftCurrentId++;
+      this.drafts.set(id, { ...draft, id });
+    });
+  }
+
+  private initializeSampleLeaderboard() {
+    // Create sample leaderboard entries
+    const sampleLeaderboard = [
+      {
+        userAddress: "0x742d35Cc6634C0532925a3b8d8f89c7C7b265f9e",
+        totalWins: 15,
+        totalEarnings: "1250",
+        gamesPlayed: 28,
+      },
+      {
+        userAddress: "0x8ba1f109551bD432803012645Hac136c22C3B8C2",
+        totalWins: 12,
+        totalEarnings: "980",
+        gamesPlayed: 25,
+      },
+      {
+        userAddress: "0x123456789abcdef123456789abcdef123456789a",
+        totalWins: 10,
+        totalEarnings: "750",
+        gamesPlayed: 22,
+      },
+      {
+        userAddress: "0x987654321fedcba987654321fedcba987654321f",
+        totalWins: 8,
+        totalEarnings: "600",
+        gamesPlayed: 18,
+      },
+      {
+        userAddress: "0xabcdef123456789abcdef123456789abcdef123456",
+        totalWins: 6,
+        totalEarnings: "450",
+        gamesPlayed: 15,
+      }
+    ];
+
+    sampleLeaderboard.forEach(entry => {
+      const id = this.leaderboardCurrentId++;
+      this.leaderboardMap.set(entry.userAddress, { ...entry, id });
     });
   }
 
@@ -98,7 +187,11 @@ export class MemStorage implements IStorage {
 
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.currentId++;
-    const user: User = { ...insertUser, id };
+    const user: User = { 
+      ...insertUser, 
+      id,
+      walletAddress: insertUser.walletAddress || null 
+    };
     this.users.set(id, user);
     return user;
   }
@@ -114,7 +207,12 @@ export class MemStorage implements IStorage {
 
   async createPlayer(insertPlayer: InsertPlayer): Promise<Player> {
     const id = this.playerCurrentId++;
-    const player: Player = { ...insertPlayer, id };
+    const player: Player = { 
+      ...insertPlayer, 
+      id,
+      points: insertPlayer.points || 0,
+      imageUrl: insertPlayer.imageUrl || null
+    };
     this.players.set(id, player);
     return player;
   }
@@ -134,7 +232,15 @@ export class MemStorage implements IStorage {
 
   async createDraft(insertDraft: InsertDraft): Promise<Draft> {
     const id = this.draftCurrentId++;
-    const draft: Draft = { ...insertDraft, id };
+    const draft: Draft = { 
+      ...insertDraft, 
+      id,
+      description: insertDraft.description || null,
+      isActive: insertDraft.isActive ?? true,
+      totalPool: insertDraft.totalPool || "0",
+      participants: insertDraft.participants || 0,
+      maxParticipants: insertDraft.maxParticipants || 100
+    };
     this.drafts.set(id, draft);
     return draft;
   }
@@ -160,7 +266,13 @@ export class MemStorage implements IStorage {
 
   async createDraftEntry(insertEntry: InsertDraftEntry): Promise<DraftEntry> {
     const id = this.entryCurrentId++;
-    const entry: DraftEntry = { ...insertEntry, id };
+    const entry: DraftEntry = { 
+      ...insertEntry, 
+      id,
+      playerIds: insertEntry.playerIds || null,
+      score: insertEntry.score || 0,
+      txHash: insertEntry.txHash || null
+    };
     const key = `${entry.draftId}-${entry.userAddress}`;
     this.draftEntries.set(key, entry);
     return entry;
@@ -169,7 +281,7 @@ export class MemStorage implements IStorage {
   // Leaderboard methods
   async getLeaderboard(): Promise<LeaderboardEntry[]> {
     return Array.from(this.leaderboardMap.values())
-      .sort((a, b) => b.totalWins - a.totalWins)
+      .sort((a, b) => (b.totalWins || 0) - (a.totalWins || 0))
       .slice(0, 10);
   }
 
@@ -186,7 +298,13 @@ export class MemStorage implements IStorage {
       return updated;
     } else {
       const id = this.leaderboardCurrentId++;
-      const newEntry: LeaderboardEntry = { ...entry, id };
+      const newEntry: LeaderboardEntry = { 
+        ...entry, 
+        id,
+        totalWins: entry.totalWins || 0,
+        totalEarnings: entry.totalEarnings || "0",
+        gamesPlayed: entry.gamesPlayed || 0
+      };
       this.leaderboardMap.set(entry.userAddress, newEntry);
       return newEntry;
     }

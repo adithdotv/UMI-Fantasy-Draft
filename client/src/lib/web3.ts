@@ -7,7 +7,7 @@ declare global {
 }
 
 export const CHILIZ_TESTNET_CONFIG = {
-  chainId: '0x15B3A', // 88250 in hex
+  chainId: '0x15B52', // 88882 in hex
   chainName: 'Chiliz Testnet',
   nativeCurrency: {
     name: 'CHZ',
