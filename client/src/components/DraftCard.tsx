@@ -3,7 +3,7 @@ import { CountdownTimer } from './CountdownTimer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Plus, Eye, Edit, Check } from 'lucide-react';
-import { useDraftParticipants, usePlayerSelection } from '@/hooks/useContract';
+import { useDraftParticipants, usePlayerSelection, useEntryFee } from '@/hooks/useContract';
 import { useWallet } from '@/hooks/useWallet';
 import { formatChzAmount } from '@/lib/web3';
 
@@ -18,6 +18,7 @@ export function DraftCard({ draft, onJoinDraft, onViewDraft, onEditLineup }: Dra
   const { account } = useWallet();
   const { data: participants = [] } = useDraftParticipants(Number(draft.id));
   const { data: playerSelection } = usePlayerSelection(Number(draft.id), account || '');
+  const { data: entryFee = '0' } = useEntryFee();
   
   const hasJoined = account && participants.includes(account);
   const prizePool = formatChzAmount(draft.totalPool.toString());
@@ -44,7 +45,7 @@ export function DraftCard({ draft, onJoinDraft, onViewDraft, onEditLineup }: Dra
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <p className="text-slate-400 text-sm">Entry Fee</p>
-          <p className="text-lg font-semibold text-slate-50">25 CHZ</p>
+          <p className="text-lg font-semibold text-slate-50">{entryFee} CHZ</p>
         </div>
         <div>
           <p className="text-slate-400 text-sm">Prize Pool</p>
