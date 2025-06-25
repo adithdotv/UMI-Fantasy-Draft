@@ -37,7 +37,7 @@ export function DraftDetailsModal({ isOpen, onClose, draftId, draftName, totalPo
       const response = await fetch('/api/players');
       return response.json() as Player[];
     },
-    enabled: shouldFetchData,
+    enabled: !!shouldFetchData,
   });
 
   // Sort participants to put current user first
