@@ -1,0 +1,134 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.19;
+
+contract FanDraftGame {
+    address public owner;
+    uint256 public draftCounter;
+    uint256 public entryFee; // In wei
+    uint256 public platformRevenue;
+
+    struct DraftEntry {
+        address player;
+        uint256[] playerIds;
+        uint256 score;
+        bool claimedReward;
+    }
+
+    struct Draft {
+        uint256 id;
+        string name;
+        bool isActive;
+        address[] participants;
+        mapping(address => DraftEntry) entries;
+        address[] winners; // Top 3
+        uint256 totalPool;
+        uint256 deadline;
+    }
+
+    mapping(uint256 => Draft) public drafts;
+    mapping(address => uint256) public totalWins;
+
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only admin can perform this action");
+        _;
+    }
+
+    constructor(uint256 _entryFee) {
+        owner = msg.sender;
+        entryFee = _entryFee;
+    }
+
+    function createDraft(string memory draftName, uint256 durationSeconds) external onlyOwner {
+        draftCounter++;
+        Draft storage d = drafts[draftCounter];
+        d.id = draftCounter;
+        d.name = draftName;
+        d.isActive = true;
+        d.deadline = block.timestamp + durationSeconds;
+    }
+
+    function joinDraft(uint256 draftId, uint256[] memory selectedPlayers) external payable {
+        Draft storage d = drafts[draftId];
+        require(d.isActive, "Draft not active");
+        require(block.timestamp <= d.deadline, "Draft deadline passed");
+        require(msg.value == entryFee, "Incorrect entry fee");
+        require(selectedPlayers.length == 11, "Must select 11 players");
+        require(d.entries[msg.sender].player == address(0), "Already joined");
+
+        d.entries[msg.sender] = DraftEntry({
+            player: msg.sender,
+            playerIds: selectedPlayers,
+            score: 0,
+            claimedReward: false
+        });
+
+        d.participants.push(msg.sender);
+        d.totalPool += msg.value;
+    }
+
+    function resolveDraft(uint256 draftId, address[] memory winnerAddresses, uint256[] memory scores) external onlyOwner {
+        Draft storage d = drafts[draftId];
+        require(d.isActive, "Draft already resolved");
+        require(block.timestamp > d.deadline, "Draft still ongoing");
+        require(winnerAddresses.length == 3 && scores.length == 3, "Top 3 required");
+
+        d.isActive = false;
+        d.winners = winnerAddresses;
+
+        uint256 pool = d.totalPool;
+        uint256 firstPrize = (pool * 60) / 100;
+        uint256 secondPrize = (pool * 25) / 100;
+        uint256 thirdPrize = (pool * 15) / 100;
+
+        platformRevenue += pool - (firstPrize + secondPrize + thirdPrize);
+
+        // Distribute rewards
+        (bool sent1, ) = winnerAddresses[0].call{value: firstPrize}("");
+        require(sent1, "1st prize transfer failed");
+
+        (bool sent2, ) = winnerAddresses[1].call{value: secondPrize}("");
+        require(sent2, "2nd prize transfer failed");
+
+        (bool sent3, ) = winnerAddresses[2].call{value: thirdPrize}("");
+        require(sent3, "3rd prize transfer failed");
+
+        // Store scores and update wins
+        for (uint256 i = 0; i < 3; i++) {
+            d.entries[winnerAddresses[i]].score = scores[i];
+            totalWins[winnerAddresses[i]]++;
+        }
+
+        emit DraftResolved(draftId, winnerAddresses, scores);
+    }
+
+    function getParticipants(uint256 draftId) public view returns (address[] memory) {
+        return drafts[draftId].participants;
+    }
+
+    function getPlayerSelection(uint256 draftId, address user) public view returns (uint256[] memory) {
+        return drafts[draftId].entries[user].playerIds;
+    }
+
+    function getDraftWinners(uint256 draftId) public view returns (address[] memory) {
+        return drafts[draftId].winners;
+    }
+
+    function withdrawRevenue() external onlyOwner {
+        require(platformRevenue > 0, "No revenue to withdraw");
+
+        uint256 amount = platformRevenue;
+        platformRevenue = 0;
+
+        (bool sent, ) = owner.call{value: amount}("");
+        require(sent, "Withdraw failed");
+    }
+
+    function changeEntryFee(uint256 newFee) external onlyOwner {
+        entryFee = newFee;
+    }
+
+    event DraftResolved(uint256 indexed draftId, address[] winners, uint256[] scores);
+
+    receive() external payable {}
+    fallback() external payable {}
+}
