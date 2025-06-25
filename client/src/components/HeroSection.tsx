@@ -9,7 +9,6 @@ export function HeroSection() {
         <div className="absolute bottom-20 right-10 w-40 h-40 bg-accent-blue rounded-full blur-3xl animate-pulse delay-1000"></div>
         <div className="absolute top-1/2 left-1/2 w-24 h-24 bg-accent-purple rounded-full blur-2xl animate-pulse delay-500"></div>
       </div>
-      
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="text-center mb-16">
           <div className="flex justify-center mb-8">
@@ -24,7 +23,7 @@ export function HeroSection() {
           </div>
           
           <h1 className="text-6xl md:text-7xl font-black mb-6">
-            <span className="bg-gradient-to-r from-accent-green via-accent-blue to-accent-purple bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-accent-green via-accent-blue to-accent-purple bg-clip-text text-[#eceef0]">
               FanDraft
             </span>
             <br />
