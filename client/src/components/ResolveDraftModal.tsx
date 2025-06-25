@@ -1,13 +1,13 @@
-import { useState } from 'react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import React, { useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Trophy, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { fanDraftContract } from '@/lib/contract';
-import { Loader2, Trophy } from 'lucide-react';
 import { useDraftParticipants } from '@/hooks/useContract';
 
 interface ResolveDraftModalProps {
@@ -17,26 +17,27 @@ interface ResolveDraftModalProps {
 }
 
 export function ResolveDraftModal({ isOpen, onClose, draftId }: ResolveDraftModalProps) {
+  const [winner, setWinner] = useState<string>('');
+  const [score, setScore] = useState<string>('');
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
   const { data: participants = [] } = useDraftParticipants(draftId || 0);
-  
-  const [winners, setWinners] = useState<string[]>(['', '', '']);
-  const [scores, setScores] = useState<string[]>(['', '', '']);
 
   const resolveDraftMutation = useMutation({
-    mutationFn: async ({ draftId, winners, scores }: { draftId: number; winners: string[]; scores: number[] }) => {
-      return await fanDraftContract.resolveDraft(draftId, winners, scores);
+    mutationFn: async ({ draftId, winner, score }: { draftId: number; winner: string; score: number }) => {
+      return await fanDraftContract.resolveDraft(draftId, winner, score);
     },
     onSuccess: () => {
       toast({
-        title: "Draft Resolved",
-        description: "Draft has been resolved and prizes distributed",
+        title: "Draft Resolved Successfully",
+        description: "Prize has been distributed to the winner",
       });
+      queryClient.invalidateQueries({ queryKey: ['/api/drafts'] });
       handleClose();
-      queryClient.invalidateQueries({ queryKey: ['/api/active-drafts'] });
     },
     onError: (error: any) => {
+      console.error('Error resolving draft:', error);
       toast({
         title: "Failed to Resolve Draft",
         description: error.message || "An error occurred",
@@ -46,8 +47,8 @@ export function ResolveDraftModal({ isOpen, onClose, draftId }: ResolveDraftModa
   });
 
   const handleClose = () => {
-    setWinners(['', '', '']);
-    setScores(['', '', '']);
+    setWinner('');
+    setScore('');
     onClose();
   };
 
@@ -56,33 +57,22 @@ export function ResolveDraftModal({ isOpen, onClose, draftId }: ResolveDraftModa
     
     if (!draftId) return;
 
-    // Validate winners
-    const validWinners = winners.filter(w => w.trim() !== '');
-    if (validWinners.length !== 3) {
+    // Validate winner
+    if (!winner.trim()) {
       toast({
-        title: "Invalid Winners",
-        description: "Please select exactly 3 winners",
+        title: "Invalid Winner",
+        description: "Please select a winner",
         variant: "destructive",
       });
       return;
     }
 
-    // Check for duplicate winners
-    if (new Set(validWinners).size !== 3) {
+    // Validate score
+    const scoreValue = parseInt(score);
+    if (isNaN(scoreValue) || scoreValue < 0) {
       toast({
-        title: "Duplicate Winners",
-        description: "Each winner must be different",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Validate scores
-    const validScores = scores.map(s => parseInt(s)).filter(s => !isNaN(s) && s >= 0);
-    if (validScores.length !== 3) {
-      toast({
-        title: "Invalid Scores",
-        description: "Please enter valid scores for all winners",
+        title: "Invalid Score",
+        description: "Please enter a valid score",
         variant: "destructive",
       });
       return;
@@ -90,21 +80,9 @@ export function ResolveDraftModal({ isOpen, onClose, draftId }: ResolveDraftModa
 
     resolveDraftMutation.mutate({ 
       draftId, 
-      winners: validWinners, 
-      scores: validScores 
+      winner: winner.trim(), 
+      score: scoreValue 
     });
-  };
-
-  const updateWinner = (position: number, address: string) => {
-    const newWinners = [...winners];
-    newWinners[position] = address;
-    setWinners(newWinners);
-  };
-
-  const updateScore = (position: number, score: string) => {
-    const newScores = [...scores];
-    newScores[position] = score;
-    setScores(newScores);
   };
 
   return (
@@ -116,33 +94,32 @@ export function ResolveDraftModal({ isOpen, onClose, draftId }: ResolveDraftModa
             <span>Resolve Draft #{draftId}</span>
           </DialogTitle>
           <DialogDescription className="text-gray-400">
-            Select the top 3 participants and their scores to distribute prizes.
+            Select the winner and their score to distribute the prize.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="text-sm text-gray-400 mb-4">
-            <p>Prize Distribution:</p>
-            <p>• 1st Place: 60% of prize pool</p>
-            <p>• 2nd Place: 25% of prize pool</p>
-            <p>• 3rd Place: 15% of prize pool</p>
-          </div>
-
-          {[0, 1, 2].map((position) => (
-            <div key={position} className="space-y-2">
-              <Label className="text-sm font-semibold text-gray-300">
-                {position === 0 ? '1st' : position === 1 ? '2nd' : '3rd'} Place Winner
-              </Label>
-              
-              <div className="grid grid-cols-2 gap-2">
-                <Select value={winners[position]} onValueChange={(value) => updateWinner(position, value)}>
-                  <SelectTrigger className="bg-gray-800 border-gray-600">
-                    <SelectValue placeholder="Select participant" />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-3 p-4 border border-gray-700 rounded-lg">
+            <h4 className="text-sm font-medium text-yellow-400">
+              🏆 Winner
+            </h4>
+            
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <Label htmlFor="winner" className="text-xs text-gray-400">
+                  Participant
+                </Label>
+                <Select 
+                  value={winner} 
+                  onValueChange={setWinner}
+                >
+                  <SelectTrigger className="bg-gray-800 border-gray-600 text-white">
+                    <SelectValue placeholder="Select winner" />
                   </SelectTrigger>
                   <SelectContent className="bg-gray-800 border-gray-600">
-                    {participants.map((participant) => (
+                    {participants.map((participant, idx) => (
                       <SelectItem 
-                        key={participant} 
+                        key={idx} 
                         value={participant}
                         className="text-white hover:bg-gray-700"
                       >
@@ -151,39 +128,47 @@ export function ResolveDraftModal({ isOpen, onClose, draftId }: ResolveDraftModa
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
 
+              <div>
+                <Label htmlFor="score" className="text-xs text-gray-400">
+                  Score
+                </Label>
                 <Input
+                  id="score"
                   type="number"
                   min="0"
-                  value={scores[position]}
-                  onChange={(e) => updateScore(position, e.target.value)}
-                  placeholder="Score"
-                  className="bg-gray-800 border-gray-600 text-white"
+                  placeholder="Enter score"
+                  value={score}
+                  onChange={(e) => setScore(e.target.value)}
+                  className="bg-gray-800 border-gray-600 text-white placeholder-gray-500"
                 />
               </div>
             </div>
-          ))}
+          </div>
 
-          <div className="flex space-x-3 pt-4">
-            <Button 
-              type="button" 
-              variant="secondary" 
+          <div className="flex justify-end space-x-3">
+            <Button
+              type="button"
+              variant="outline"
               onClick={handleClose}
-              className="flex-1 bg-gray-700 hover:bg-gray-600"
+              className="border-gray-600 text-gray-300 hover:bg-gray-800"
             >
               Cancel
             </Button>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={resolveDraftMutation.isPending}
-              className="flex-1 bg-purple-600 hover:bg-purple-700"
+              className="bg-yellow-600 hover:bg-yellow-700 text-black font-medium"
             >
               {resolveDraftMutation.isPending ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Resolving...
+                </>
               ) : (
-                <Trophy className="mr-2 h-4 w-4" />
+                'Resolve Draft'
               )}
-              Resolve & Distribute
             </Button>
           </div>
         </form>

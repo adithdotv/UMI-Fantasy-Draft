@@ -1,27 +1,27 @@
 import { ethers } from 'ethers';
 import { getSigner, getProvider } from './web3';
 
-export const CONTRACT_ADDRESS = '0x7388FfE07dd833a65f6b1D38B9bF398612e96d0c';
+export const CONTRACT_ADDRESS = '0xBae9f72f75624d27933d8cf85FE4b5C305cee2c5';
 
 export const CONTRACT_ABI = [
   "function owner() view returns (address)",
   "function draftCounter() view returns (uint256)",
   "function entryFee() view returns (uint256)",
   "function platformRevenue() view returns (uint256)",
-  "function drafts(uint256) view returns (uint256 id, bool isActive, uint256 totalPool, uint256 deadline)",
+  "function drafts(uint256) view returns (uint256 id, bool isActive, address winner, uint256 totalPool, uint256 deadline)",
   "function getDraft(uint256 draftId) view returns (uint256 id, bool isActive, uint256 totalPool, uint256 deadline)",
   "function getDraftName(uint256 draftId) view returns (string)",
   "function getAllDraftNames() view returns (string[])",
   "function totalWins(address) view returns (uint256)",
   "function createDraft(string memory draftName, uint256 durationSeconds)",
   "function joinDraft(uint256 draftId, uint256[] memory selectedPlayers) payable",
-  "function resolveDraft(uint256 draftId, address[] memory winnerAddresses, uint256[] memory scores)",
+  "function resolveDraft(uint256 draftId, address winner, uint256 score)",
   "function getParticipants(uint256 draftId) view returns (address[])",
   "function getPlayerSelection(uint256 draftId, address user) view returns (uint256[])",
-  "function getDraftWinners(uint256 draftId) view returns (address[])",
+  "function getDraftWinner(uint256 draftId) view returns (address)",
   "function withdrawRevenue()",
   "function changeEntryFee(uint256 newFee)",
-  "event DraftResolved(uint256 indexed draftId, address[] winners, uint256[] scores)"
+  "event DraftResolved(uint256 indexed draftId, address winner, uint256 score)"
 ];
 
 export interface ContractDraft {
@@ -132,9 +132,9 @@ export class FanDraftContract {
     return selection.map((id: bigint) => Number(id));
   }
 
-  async getDraftWinners(draftId: number): Promise<string[]> {
+  async getDraftWinner(draftId: number): Promise<string> {
     const contract = await this.getContract();
-    return await contract.getDraftWinners(draftId);
+    return await contract.getDraftWinner(draftId);
   }
 
   async getUserWins(address: string): Promise<number> {
@@ -156,9 +156,9 @@ export class FanDraftContract {
     return tx.hash;
   }
 
-  async resolveDraft(draftId: number, winnerAddresses: string[], scores: number[]): Promise<string> {
+  async resolveDraft(draftId: number, winnerAddress: string, score: number): Promise<string> {
     const contract = await this.getContract(true);
-    const tx = await contract.resolveDraft(draftId, winnerAddresses, scores);
+    const tx = await contract.resolveDraft(draftId, winnerAddress, score);
     await tx.wait();
     return tx.hash;
   }
