@@ -97,7 +97,8 @@ FanDraft is a blockchain-based fantasy football platform built on the Chiliz tes
 
 ## Changelog
 
-- June 25, 2025. Initial setup
+- June 25, 2025: Initial setup with complete fantasy football platform
+- June 25, 2025: Fixed Chiliz testnet chain ID to 88882 and improved wallet connection error handling
 
 ## User Preferences
 

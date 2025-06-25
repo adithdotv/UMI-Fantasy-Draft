@@ -63,7 +63,8 @@ export function useWallet() {
         await updateBalance(address);
       }
     } catch (error: any) {
-      setError(error.message);
+      console.error('Wallet connection error:', error);
+      setError(error.message || 'Failed to connect wallet');
     } finally {
       setIsConnecting(false);
     }

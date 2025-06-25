@@ -24,32 +24,55 @@ export async function connectWallet(): Promise<string | null> {
   }
 
   try {
-    // Request account access
+    // Request account access first
     const accounts = await window.ethereum.request({
       method: 'eth_requestAccounts',
     });
 
-    // Switch to Chiliz testnet
-    try {
-      await window.ethereum.request({
-        method: 'wallet_switchEthereumChain',
-        params: [{ chainId: CHILIZ_TESTNET_CONFIG.chainId }],
-      });
-    } catch (switchError: any) {
-      // Chain not added to MetaMask
-      if (switchError.code === 4902) {
+    if (accounts.length === 0) {
+      throw new Error('No accounts found. Please unlock MetaMask.');
+    }
+
+    // Check current network
+    const currentChainId = await window.ethereum.request({
+      method: 'eth_chainId',
+    });
+
+    // If not on Chiliz testnet, try to switch
+    if (currentChainId !== CHILIZ_TESTNET_CONFIG.chainId) {
+      try {
         await window.ethereum.request({
-          method: 'wallet_addEthereumChain',
-          params: [CHILIZ_TESTNET_CONFIG],
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: CHILIZ_TESTNET_CONFIG.chainId }],
         });
-      } else {
-        throw switchError;
+      } catch (switchError: any) {
+        // Chain not added to MetaMask (error code 4902)
+        if (switchError.code === 4902) {
+          try {
+            await window.ethereum.request({
+              method: 'wallet_addEthereumChain',
+              params: [CHILIZ_TESTNET_CONFIG],
+            });
+          } catch (addError: any) {
+            console.error('Failed to add Chiliz testnet:', addError);
+            throw new Error('Failed to add Chiliz testnet to MetaMask. Please add it manually.');
+          }
+        } else if (switchError.code === 4001) {
+          // User rejected the request
+          throw new Error('Please switch to Chiliz testnet to continue.');
+        } else {
+          console.error('Failed to switch network:', switchError);
+          throw new Error('Failed to switch to Chiliz testnet. Please switch manually.');
+        }
       }
     }
 
     return accounts[0];
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to connect wallet:', error);
+    if (error.code === 4001) {
+      throw new Error('Connection rejected. Please accept the connection request.');
+    }
     throw error;
   }
 }
