@@ -20,59 +20,87 @@ export function DraftStats() {
   }, 0);
 
   return (
-    <section className={`grid grid-cols-1 ${isOwner ? 'md:grid-cols-5' : 'md:grid-cols-4'} gap-6 mb-12`}>
-      <div className="bg-secondary-dark p-6 rounded-xl border border-slate-700">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-slate-400 text-sm">Active Drafts</p>
-            <p className="text-2xl font-bold text-slate-50">{activeDrafts.length}</p>
+    <section className={`grid grid-cols-1 ${isOwner ? 'md:grid-cols-5' : 'md:grid-cols-4'} gap-6 mb-16`}>
+      <div className="stat-card p-6 rounded-2xl hover-lift">
+        <div className="flex items-center justify-between mb-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-accent-green to-green-400 rounded-xl flex items-center justify-center">
+            <Calendar className="h-6 w-6 text-white" />
           </div>
-          <Calendar className="h-8 w-8 text-accent-green" />
+          <div className="text-right">
+            <p className="text-3xl font-black text-slate-50">{activeDrafts.length}</p>
+            <div className="w-8 h-1 bg-gradient-to-r from-accent-green to-green-400 rounded-full ml-auto"></div>
+          </div>
+        </div>
+        <div>
+          <p className="text-slate-400 text-sm font-medium">Active Drafts</p>
+          <p className="text-xs text-accent-green font-semibold">Live tournaments</p>
         </div>
       </div>
       
-      <div className="bg-secondary-dark p-6 rounded-xl border border-slate-700">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-slate-400 text-sm">Total Prize Pool</p>
-            <p className="text-2xl font-bold text-slate-50">
-              {totalPrizePool.toFixed(2)} CHZ
-            </p>
+      <div className="stat-card p-6 rounded-2xl hover-lift">
+        <div className="flex items-center justify-between mb-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center animate-glow">
+            <Trophy className="h-6 w-6 text-white" />
           </div>
-          <Trophy className="h-8 w-8 text-yellow-500" />
+          <div className="text-right">
+            <p className="text-3xl font-black text-slate-50">{totalPrizePool.toFixed(1)}</p>
+            <div className="w-8 h-1 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full ml-auto"></div>
+          </div>
+        </div>
+        <div>
+          <p className="text-slate-400 text-sm font-medium">Total Prize Pool</p>
+          <p className="text-xs text-yellow-500 font-semibold">CHZ rewards</p>
         </div>
       </div>
       
-      <div className="bg-secondary-dark p-6 rounded-xl border border-slate-700">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-slate-400 text-sm">Your Wins</p>
-            <p className="text-2xl font-bold text-slate-50">{userWins}</p>
+      <div className="stat-card p-6 rounded-2xl hover-lift">
+        <div className="flex items-center justify-between mb-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center">
+            <Medal className="h-6 w-6 text-white" />
           </div>
-          <Medal className="h-8 w-8 text-accent-green" />
+          <div className="text-right">
+            <p className="text-3xl font-black text-slate-50">{userWins}</p>
+            <div className="w-8 h-1 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full ml-auto"></div>
+          </div>
+        </div>
+        <div>
+          <p className="text-slate-400 text-sm font-medium">Your Victories</p>
+          <p className="text-xs text-green-500 font-semibold">Personal wins</p>
         </div>
       </div>
       
-      <div className="bg-secondary-dark p-6 rounded-xl border border-slate-700">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-slate-400 text-sm">Total Players</p>
-            <p className="text-2xl font-bold text-slate-50">{totalParticipants}</p>
+      <div className="stat-card p-6 rounded-2xl hover-lift">
+        <div className="flex items-center justify-between mb-4">
+          <div className="w-12 h-12 bg-gradient-to-br from-accent-blue to-blue-500 rounded-xl flex items-center justify-center">
+            <Users className="h-6 w-6 text-white" />
           </div>
-          <Users className="h-8 w-8 text-accent-blue" />
+          <div className="text-right">
+            <p className="text-3xl font-black text-slate-50">{totalParticipants}</p>
+            <div className="w-8 h-1 bg-gradient-to-r from-accent-blue to-blue-500 rounded-full ml-auto"></div>
+          </div>
+        </div>
+        <div>
+          <p className="text-slate-400 text-sm font-medium">Total Players</p>
+          <p className="text-xs text-accent-blue font-semibold">Global community</p>
         </div>
       </div>
       
       {isOwner && (
-        <div className="bg-secondary-dark p-6 rounded-xl border border-slate-700">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-slate-400 text-sm">Platform Revenue</p>
-              <p className="text-2xl font-bold text-slate-50">
-                {parseFloat(platformRevenue).toFixed(2)} CHZ
-              </p>
+        <div className="stat-card p-6 rounded-2xl hover-lift pulse-border">
+          <div className="flex items-center justify-between mb-4">
+            <div className="w-12 h-12 bg-gradient-to-br from-accent-purple to-purple-600 rounded-xl flex items-center justify-center animate-glow">
+              <DollarSign className="h-6 w-6 text-white" />
             </div>
-            <DollarSign className="h-8 w-8 text-purple-500" />
+            <div className="text-right">
+              <p className="text-3xl font-black text-slate-50">
+                {parseFloat(platformRevenue).toFixed(1)}
+              </p>
+              <div className="w-8 h-1 bg-gradient-to-r from-accent-purple to-purple-600 rounded-full ml-auto"></div>
+            </div>
+          </div>
+          <div>
+            <p className="text-slate-400 text-sm font-medium">Platform Revenue</p>
+            <p className="text-xs text-accent-purple font-semibold">CHZ earnings</p>
           </div>
         </div>
       )}
