@@ -111,6 +111,7 @@ FanDraft is a blockchain-based fantasy football platform built on the Chiliz tes
 - June 25, 2025: Updated to new contract address 0xBae9f72f75624d27933d8cf85FE4b5C305cee2c5 with single winner resolution system
 - June 25, 2025: Updated leaderboard to use real blockchain data from smart contract with current user "You" tag
 - June 25, 2025: Added platform revenue tracking showing accumulated CHZ balance in smart contract
+- June 25, 2025: Updated admin panel to display platform revenue with withdraw button, removed separate revenue management section
 
 ## User Preferences
 

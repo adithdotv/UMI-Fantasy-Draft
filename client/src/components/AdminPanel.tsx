@@ -7,13 +7,15 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Plus, Settings, DollarSign, Download } from 'lucide-react';
+import { Loader2, Plus, Settings, DollarSign, Download, Wallet } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { usePlatformRevenue } from '@/hooks/useContract';
 
 export function AdminPanel() {
   const { account } = useWallet();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+  const { data: platformRevenue = '0' } = usePlatformRevenue();
   
   const [draftName, setDraftName] = useState('');
   const [draftDuration, setDraftDuration] = useState('24');
@@ -69,8 +71,9 @@ export function AdminPanel() {
     onSuccess: () => {
       toast({
         title: "Revenue Withdrawn",
-        description: "Platform revenue has been withdrawn successfully",
+        description: `Successfully withdrew ${parseFloat(platformRevenue).toFixed(2)} CHZ`,
       });
+      queryClient.invalidateQueries({ queryKey: ['platformRevenue'] });
     },
     onError: (error: any) => {
       toast({
@@ -227,27 +230,39 @@ export function AdminPanel() {
 
       <Separator className="bg-gray-700" />
 
-      {/* Revenue Management */}
+      {/* Platform Revenue */}
       <Card className="bg-gray-800/50 border-gray-700">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2 text-white">
-            <Download className="h-4 w-4" />
-            <span>Revenue Management</span>
+            <Wallet className="h-4 w-4" />
+            <span>Platform Revenue</span>
           </CardTitle>
-          <CardDescription>Withdraw accumulated platform revenue</CardDescription>
+          <CardDescription>View and withdraw accumulated platform revenue</CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
+          <div className="bg-slate-800 p-4 rounded-lg">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-slate-400 text-sm">Available Revenue</p>
+                <p className="text-2xl font-bold text-slate-50">
+                  {parseFloat(platformRevenue).toFixed(2)} CHZ
+                </p>
+              </div>
+              <DollarSign className="h-8 w-8 text-green-500" />
+            </div>
+          </div>
+          
           <Button 
             onClick={handleWithdrawRevenue}
-            disabled={withdrawRevenueMutation.isPending}
-            className="bg-yellow-600 hover:bg-yellow-700"
+            disabled={withdrawRevenueMutation.isPending || parseFloat(platformRevenue) <= 0}
+            className="w-full bg-green-600 hover:bg-green-700"
           >
             {withdrawRevenueMutation.isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             ) : (
               <Download className="mr-2 h-4 w-4" />
             )}
-            Withdraw Revenue
+            Withdraw All Revenue
           </Button>
         </CardContent>
       </Card>
