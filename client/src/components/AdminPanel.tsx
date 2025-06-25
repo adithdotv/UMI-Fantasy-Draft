@@ -7,22 +7,17 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Plus, Settings, DollarSign, Download, Trophy, Clock } from 'lucide-react';
+import { Loader2, Plus, Settings, DollarSign, Download } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useActiveDrafts } from '@/hooks/useContract';
 
 export function AdminPanel() {
   const { account } = useWallet();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { data: activeDrafts = [] } = useActiveDrafts();
   
   const [draftName, setDraftName] = useState('');
   const [draftDuration, setDraftDuration] = useState('24');
   const [newEntryFee, setNewEntryFee] = useState('');
-  const [resolveDraftId, setResolveDraftId] = useState('');
-  const [winnerAddresses, setWinnerAddresses] = useState(['', '', '']);
-  const [winnerScores, setWinnerScores] = useState(['', '', '']);
 
   const createDraftMutation = useMutation({
     mutationFn: async ({ name, duration }: { name: string; duration: number }) => {
@@ -86,29 +81,6 @@ export function AdminPanel() {
     },
   });
 
-  const resolveDraftMutation = useMutation({
-    mutationFn: async ({ draftId, winners, scores }: { draftId: number; winners: string[]; scores: number[] }) => {
-      return await fanDraftContract.resolveDraft(draftId, winners, scores);
-    },
-    onSuccess: () => {
-      toast({
-        title: "Draft Resolved",
-        description: "Draft has been resolved and prizes distributed",
-      });
-      setResolveDraftId('');
-      setWinnerAddresses(['', '', '']);
-      setWinnerScores(['', '', '']);
-      queryClient.invalidateQueries({ queryKey: ['/api/active-drafts'] });
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Failed to Resolve Draft",
-        description: error.message || "An error occurred",
-        variant: "destructive",
-      });
-    },
-  });
-
   const handleCreateDraft = (e: React.FormEvent) => {
     e.preventDefault();
     if (!draftName.trim()) {
@@ -149,78 +121,6 @@ export function AdminPanel() {
 
   const handleWithdrawRevenue = () => {
     withdrawRevenueMutation.mutate();
-  };
-
-  const handleResolveDraft = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    const draftId = parseInt(resolveDraftId);
-    if (!draftId || draftId < 1) {
-      toast({
-        title: "Invalid Draft ID",
-        description: "Please enter a valid draft ID",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Validate winner addresses
-    const winners = winnerAddresses.filter(addr => addr.trim() !== '');
-    if (winners.length !== 3) {
-      toast({
-        title: "Invalid Winners",
-        description: "Please enter exactly 3 winner addresses",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Validate scores
-    const scores = winnerScores.map(score => parseInt(score)).filter(score => !isNaN(score));
-    if (scores.length !== 3) {
-      toast({
-        title: "Invalid Scores", 
-        description: "Please enter exactly 3 valid scores",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    // Check if draft exists and is expired
-    const draft = activeDrafts.find(d => Number(d.id) === draftId);
-    if (!draft) {
-      toast({
-        title: "Draft Not Found",
-        description: "Could not find draft with the specified ID",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const now = Math.floor(Date.now() / 1000);
-    const deadline = Number(draft.deadline);
-    if (now <= deadline) {
-      toast({
-        title: "Draft Still Active",
-        description: "Can only resolve drafts that have passed their deadline",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    resolveDraftMutation.mutate({ draftId, winners, scores });
-  };
-
-  const updateWinnerAddress = (index: number, value: string) => {
-    const newAddresses = [...winnerAddresses];
-    newAddresses[index] = value;
-    setWinnerAddresses(newAddresses);
-  };
-
-  const updateWinnerScore = (index: number, value: string) => {
-    const newScores = [...winnerScores];
-    newScores[index] = value;
-    setWinnerScores(newScores);
   };
 
   if (!account) {
@@ -324,70 +224,6 @@ export function AdminPanel() {
           </CardContent>
         </Card>
       </div>
-
-      <Separator className="bg-gray-700" />
-
-      {/* Resolve Draft */}
-      <Card className="bg-gray-800/50 border-gray-700">
-        <CardHeader>
-          <CardTitle className="flex items-center space-x-2 text-white">
-            <Trophy className="h-4 w-4" />
-            <span>Resolve Draft</span>
-          </CardTitle>
-          <CardDescription>Resolve expired drafts and distribute prizes to winners</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleResolveDraft} className="space-y-4">
-            <div>
-              <Label htmlFor="resolveDraftId" className="text-gray-300">Draft ID</Label>
-              <Input
-                id="resolveDraftId"
-                type="number"
-                min="1"
-                value={resolveDraftId}
-                onChange={(e) => setResolveDraftId(e.target.value)}
-                placeholder="Enter draft ID to resolve"
-                className="bg-gray-700 border-gray-600 text-white"
-              />
-            </div>
-            
-            <div className="space-y-3">
-              <Label className="text-gray-300">Winner Addresses & Scores (1st, 2nd, 3rd)</Label>
-              {[0, 1, 2].map((index) => (
-                <div key={index} className="grid grid-cols-2 gap-2">
-                  <Input
-                    value={winnerAddresses[index]}
-                    onChange={(e) => updateWinnerAddress(index, e.target.value)}
-                    placeholder={`${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : 'rd'} place wallet address`}
-                    className="bg-gray-700 border-gray-600 text-white text-xs"
-                  />
-                  <Input
-                    type="number"
-                    min="0"
-                    value={winnerScores[index]}
-                    onChange={(e) => updateWinnerScore(index, e.target.value)}
-                    placeholder={`${index + 1}${index === 0 ? 'st' : index === 1 ? 'nd' : 'rd'} place score`}
-                    className="bg-gray-700 border-gray-600 text-white"
-                  />
-                </div>
-              ))}
-            </div>
-            
-            <Button 
-              type="submit" 
-              disabled={resolveDraftMutation.isPending}
-              className="w-full bg-purple-600 hover:bg-purple-700"
-            >
-              {resolveDraftMutation.isPending ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
-                <Trophy className="mr-2 h-4 w-4" />
-              )}
-              Resolve Draft & Distribute Prizes
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
 
       <Separator className="bg-gray-700" />
 
