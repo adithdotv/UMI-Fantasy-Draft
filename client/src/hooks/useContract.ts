@@ -97,17 +97,18 @@ export function useBlockchainLeaderboard() {
     queryKey: ['blockchainLeaderboard'],
     queryFn: async () => {
       try {
-        // Get all drafts to find unique participants
-        const activeDrafts = await fanDraftContract.getActiveDrafts();
         const allParticipants = new Set<string>();
         
-        // Collect all participants from all drafts
-        for (const draft of activeDrafts) {
+        // Get total number of drafts and iterate through all of them
+        const draftCounter = await fanDraftContract.getDraftCounter();
+        
+        // Collect all participants from all drafts (past and present)
+        for (let i = 1; i <= draftCounter; i++) {
           try {
-            const participants = await fanDraftContract.getParticipants(Number(draft.id));
+            const participants = await fanDraftContract.getParticipants(i);
             participants.forEach(p => allParticipants.add(p));
           } catch (e) {
-            console.warn('Could not fetch participants for draft', draft.id);
+            console.warn('Could not fetch participants for draft', i);
           }
         }
         
