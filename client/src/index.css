@@ -1,0 +1,113 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(210, 40%, 98%);
+  --foreground: hsl(210, 11%, 15%);
+  --muted: hsl(210, 40%, 96%);
+  --muted-foreground: hsl(215, 13%, 65%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(210, 11%, 15%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(210, 11%, 15%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --primary: hsl(210, 40%, 6%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(210, 18%, 16%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --accent: hsl(158, 64%, 52%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(210, 11%, 15%);
+  --radius: 0.5rem;
+  
+  /* Custom FanDraft theme colors */
+  --primary-dark: hsl(222, 47%, 11%);
+  --secondary-dark: hsl(215, 25%, 16%);
+  --accent-green: hsl(158, 64%, 52%);
+  --accent-blue: hsl(217, 91%, 60%);
+  --status-error: hsl(0, 84%, 60%);
+  --status-warning: hsl(41, 96%, 48%);
+}
+
+.dark {
+  --background: hsl(222, 47%, 11%);
+  --foreground: hsl(210, 40%, 98%);
+  --muted: hsl(215, 25%, 16%);
+  --muted-foreground: hsl(215, 20%, 65%);
+  --popover: hsl(222, 47%, 11%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --card: hsl(215, 25%, 16%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --border: hsl(215, 28%, 17%);
+  --input: hsl(215, 28%, 17%);
+  --primary: hsl(158, 64%, 52%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(215, 25%, 16%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --accent: hsl(158, 64%, 52%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 62%, 30%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --ring: hsl(215, 20%, 65%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    background-color: hsl(222, 47%, 11%);
+    color: hsl(210, 40%, 98%);
+  }
+}
+
+/* Custom utility classes for FanDraft theme */
+.bg-primary-dark {
+  background-color: hsl(222, 47%, 11%);
+}
+
+.bg-secondary-dark {
+  background-color: hsl(215, 25%, 16%);
+}
+
+.text-accent-green {
+  color: hsl(158, 64%, 52%);
+}
+
+.text-accent-blue {
+  color: hsl(217, 91%, 60%);
+}
+
+.bg-accent-green {
+  background-color: hsl(158, 64%, 52%);
+}
+
+.bg-accent-blue {
+  background-color: hsl(217, 91%, 60%);
+}
+
+.border-slate-700 {
+  border-color: hsl(215, 28%, 17%);
+}
+
+.text-slate-50 {
+  color: hsl(210, 40%, 98%);
+}
+
+.text-slate-300 {
+  color: hsl(212, 13%, 65%);
+}
+
+.text-slate-400 {
+  color: hsl(215, 20%, 65%);
+}
+
+.hover\:bg-emerald-600:hover {
+  background-color: hsl(158, 64%, 45%);
+}

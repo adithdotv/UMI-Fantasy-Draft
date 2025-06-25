@@ -1,0 +1,67 @@
+import { Calendar, Trophy, Medal, Users } from 'lucide-react';
+import { useActiveDrafts, useUserWins } from '@/hooks/useContract';
+import { useQuery } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
+
+export function DraftStats() {
+  const { data: activeDrafts = [] } = useActiveDrafts();
+  const { data: userWins = 0 } = useUserWins();
+  
+  const { data: stats } = useQuery({
+    queryKey: ['/api/stats'],
+    queryFn: async () => {
+      const response = await apiRequest('GET', '/api/stats');
+      return response.json();
+    },
+  });
+
+  const totalPrizePool = activeDrafts.reduce((sum, draft) => {
+    return sum + parseFloat(draft.totalPool.toString());
+  }, 0);
+
+  return (
+    <section className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+      <div className="bg-secondary-dark p-6 rounded-xl border border-slate-700">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-slate-400 text-sm">Active Drafts</p>
+            <p className="text-2xl font-bold text-slate-50">{activeDrafts.length}</p>
+          </div>
+          <Calendar className="h-8 w-8 text-accent-green" />
+        </div>
+      </div>
+      
+      <div className="bg-secondary-dark p-6 rounded-xl border border-slate-700">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-slate-400 text-sm">Total Prize Pool</p>
+            <p className="text-2xl font-bold text-slate-50">
+              {totalPrizePool.toFixed(0)} CHZ
+            </p>
+          </div>
+          <Trophy className="h-8 w-8 text-yellow-500" />
+        </div>
+      </div>
+      
+      <div className="bg-secondary-dark p-6 rounded-xl border border-slate-700">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-slate-400 text-sm">Your Wins</p>
+            <p className="text-2xl font-bold text-slate-50">{userWins}</p>
+          </div>
+          <Medal className="h-8 w-8 text-accent-green" />
+        </div>
+      </div>
+      
+      <div className="bg-secondary-dark p-6 rounded-xl border border-slate-700">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-slate-400 text-sm">Total Players</p>
+            <p className="text-2xl font-bold text-slate-50">{stats?.totalPlayers || 0}</p>
+          </div>
+          <Users className="h-8 w-8 text-accent-blue" />
+        </div>
+      </div>
+    </section>
+  );
+}
