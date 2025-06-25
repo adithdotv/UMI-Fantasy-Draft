@@ -9,6 +9,7 @@ export const CONTRACT_ABI = [
   "function entryFee() view returns (uint256)",
   "function platformRevenue() view returns (uint256)",
   "function drafts(uint256) view returns (uint256 id, string name, bool isActive, uint256 totalPool, uint256 deadline)",
+  "function getDraft(uint256 draftId) view returns (uint256 id, string name, bool isActive, address[] participants, address[] winners, uint256 totalPool, uint256 deadline)",
   "function totalWins(address) view returns (uint256)",
   "function createDraft(string memory draftName, uint256 durationSeconds)",
   "function joinDraft(uint256 draftId, uint256[] memory selectedPlayers) payable",
@@ -27,6 +28,8 @@ export interface ContractDraft {
   isActive: boolean;
   totalPool: bigint;
   deadline: bigint;
+  participants?: string[];
+  winners?: string[];
 }
 
 export class FanDraftContract {
@@ -60,14 +63,16 @@ export class FanDraftContract {
   async getDraft(draftId: number): Promise<ContractDraft | null> {
     try {
       const contract = await this.getContract();
-      const draft = await contract.drafts(draftId);
+      const draft = await contract.getDraft(draftId);
       
       return {
-        id: draft.id,
-        name: draft.name,
-        isActive: draft.isActive,
-        totalPool: draft.totalPool,
-        deadline: draft.deadline,
+        id: draft[0],
+        name: draft[1],
+        isActive: draft[2],
+        participants: draft[3],
+        winners: draft[4],
+        totalPool: draft[5],
+        deadline: draft[6],
       };
     } catch (error) {
       console.error('Error fetching draft:', error);
