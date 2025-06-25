@@ -5,6 +5,7 @@ import { RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 import { PlayerSelectionModal } from './PlayerSelectionModal';
 import { ResolveDraftModal } from './ResolveDraftModal';
+import { DraftDetailsModal } from './DraftDetailsModal';
 
 export function ActiveDrafts() {
   const { data: drafts = [], isLoading, refetch } = useActiveDrafts();
@@ -12,6 +13,8 @@ export function ActiveDrafts() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [resolveDraftId, setResolveDraftId] = useState<number | null>(null);
   const [isResolveModalOpen, setIsResolveModalOpen] = useState(false);
+  const [viewDraftId, setViewDraftId] = useState<number | null>(null);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
 
   const handleJoinDraft = (draftId: number) => {
     setSelectedDraftId(draftId);
@@ -19,8 +22,8 @@ export function ActiveDrafts() {
   };
 
   const handleViewDraft = (draftId: number) => {
-    // TODO: Implement draft details view
-    console.log('View draft:', draftId);
+    setViewDraftId(draftId);
+    setIsViewModalOpen(true);
   };
 
   const handleEditLineup = (draftId: number) => {
@@ -92,6 +95,14 @@ export function ActiveDrafts() {
         isOpen={isResolveModalOpen}
         onClose={() => setIsResolveModalOpen(false)}
         draftId={resolveDraftId}
+      />
+
+      <DraftDetailsModal
+        isOpen={isViewModalOpen}
+        onClose={() => setIsViewModalOpen(false)}
+        draftId={viewDraftId}
+        draftName={drafts.find(d => Number(d.id) === viewDraftId)?.name}
+        totalPool={drafts.find(d => Number(d.id) === viewDraftId)?.totalPool}
       />
     </>
   );
