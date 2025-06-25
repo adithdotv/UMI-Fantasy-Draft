@@ -1,21 +1,12 @@
 import { Calendar, Trophy, Medal, Users, DollarSign } from 'lucide-react';
-import { useActiveDrafts, useUserWins, usePlatformRevenue } from '@/hooks/useContract';
-import { useQuery } from '@tanstack/react-query';
-import { apiRequest } from '@/lib/queryClient';
+import { useActiveDrafts, useUserWins, usePlatformRevenue, useTotalUniqueParticipants } from '@/hooks/useContract';
 import { formatChzAmount } from '@/lib/web3';
 
 export function DraftStats() {
   const { data: activeDrafts = [] } = useActiveDrafts();
   const { data: userWins = 0 } = useUserWins();
   const { data: platformRevenue = '0' } = usePlatformRevenue();
-  
-  const { data: stats } = useQuery({
-    queryKey: ['/api/stats'],
-    queryFn: async () => {
-      const response = await apiRequest('GET', '/api/stats');
-      return response.json();
-    },
-  });
+  const { data: totalParticipants = 0 } = useTotalUniqueParticipants();
 
   const totalPrizePool = activeDrafts.reduce((sum, draft) => {
     const poolInChz = parseFloat(formatChzAmount(draft.totalPool.toString()));
@@ -60,7 +51,7 @@ export function DraftStats() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-slate-400 text-sm">Total Players</p>
-            <p className="text-2xl font-bold text-slate-50">{stats?.totalPlayers || 0}</p>
+            <p className="text-2xl font-bold text-slate-50">{totalParticipants}</p>
           </div>
           <Users className="h-8 w-8 text-accent-blue" />
         </div>

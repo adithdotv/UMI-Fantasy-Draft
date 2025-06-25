@@ -155,3 +155,30 @@ export function usePlatformRevenue() {
     staleTime: 15000, // Cache for 15 seconds
   });
 }
+
+export function useTotalUniqueParticipants() {
+  const { data: activeDrafts = [] } = useActiveDrafts();
+  
+  return useQuery({
+    queryKey: ['totalUniqueParticipants', activeDrafts.length],
+    queryFn: async () => {
+      const allParticipants = new Set<string>();
+      
+      // Get participants from all drafts (active and past)
+      const draftCounter = await fanDraftContract.getDraftCounter();
+      
+      for (let i = 1; i <= draftCounter; i++) {
+        try {
+          const participants = await fanDraftContract.getParticipants(i);
+          participants.forEach(participant => allParticipants.add(participant.toLowerCase()));
+        } catch (error) {
+          // Draft might not exist or have participants, continue
+        }
+      }
+      
+      return allParticipants.size;
+    },
+    refetchInterval: 60000, // Refresh every minute
+    enabled: activeDrafts.length >= 0, // Always enabled once activeDrafts is loaded
+  });
+}
