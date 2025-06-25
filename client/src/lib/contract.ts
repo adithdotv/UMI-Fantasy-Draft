@@ -26,7 +26,6 @@ export const CONTRACT_ABI = [
 
 export interface ContractDraft {
   id: bigint;
-  name: string;
   isActive: boolean;
   totalPool: bigint;
   deadline: bigint;
@@ -86,7 +85,6 @@ export class FanDraftContract {
       
       return {
         id: draft[0],
-        name: `Draft #${draftId}`,
         isActive: draft[1],
         totalPool: draft[2],
         deadline: draft[3],
@@ -152,7 +150,7 @@ export class FanDraftContract {
   async createDraft(name: string, durationHours: number): Promise<string> {
     const contract = await this.getContract(true);
     const durationSeconds = durationHours * 3600; // Convert hours to seconds
-    const tx = await contract.createDraft(name, durationSeconds);
+    const tx = await contract.createDraft(durationSeconds);
     await tx.wait();
     return tx.hash;
   }

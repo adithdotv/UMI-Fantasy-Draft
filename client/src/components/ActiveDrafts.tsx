@@ -101,7 +101,6 @@ export function ActiveDrafts() {
         isOpen={isViewModalOpen}
         onClose={() => setIsViewModalOpen(false)}
         draftId={viewDraftId}
-        draftName={drafts.find(d => Number(d.id) === viewDraftId)?.name}
         totalPool={drafts.find(d => Number(d.id) === viewDraftId)?.totalPool}
       />
     </>

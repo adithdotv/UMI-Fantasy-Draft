@@ -17,20 +17,18 @@ export function AdminPanel() {
   const queryClient = useQueryClient();
   const { data: platformRevenue = '0' } = usePlatformRevenue();
   
-  const [draftName, setDraftName] = useState('');
   const [draftDuration, setDraftDuration] = useState('24');
   const [newEntryFee, setNewEntryFee] = useState('');
 
   const createDraftMutation = useMutation({
-    mutationFn: async ({ name, duration }: { name: string; duration: number }) => {
-      return await fanDraftContract.createDraft(name, duration);
+    mutationFn: async ({ duration }: { duration: number }) => {
+      return await fanDraftContract.createDraft('', duration);
     },
     onSuccess: () => {
       toast({
         title: "Draft Created",
         description: "New draft has been created successfully",
       });
-      setDraftName('');
       setDraftDuration('24');
       queryClient.invalidateQueries({ queryKey: ['/api/active-drafts'] });
     },
@@ -86,14 +84,6 @@ export function AdminPanel() {
 
   const handleCreateDraft = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!draftName.trim()) {
-      toast({
-        title: "Invalid Input",
-        description: "Please enter a draft name",
-        variant: "destructive",
-      });
-      return;
-    }
     
     const duration = parseInt(draftDuration);
     if (duration < 1 || duration > 168) { // Max 1 week
@@ -105,7 +95,7 @@ export function AdminPanel() {
       return;
     }
 
-    createDraftMutation.mutate({ name: draftName, duration });
+    createDraftMutation.mutate({ duration });
   };
 
   const handleChangeEntryFee = (e: React.FormEvent) => {
@@ -149,16 +139,6 @@ export function AdminPanel() {
           </CardHeader>
           <CardContent>
             <form onSubmit={handleCreateDraft} className="space-y-4">
-              <div>
-                <Label htmlFor="draftName" className="text-gray-300">Draft Name</Label>
-                <Input
-                  id="draftName"
-                  value={draftName}
-                  onChange={(e) => setDraftName(e.target.value)}
-                  placeholder="e.g., Premier League Gameweek 15"
-                  className="bg-gray-700 border-gray-600 text-white"
-                />
-              </div>
               <div>
                 <Label htmlFor="draftDuration" className="text-gray-300">Duration (hours)</Label>
                 <Input

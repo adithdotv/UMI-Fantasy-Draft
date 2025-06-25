@@ -12,7 +12,6 @@ interface DraftDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
   draftId: number | null;
-  draftName?: string;
   totalPool?: bigint;
 }
 
@@ -23,7 +22,7 @@ interface Player {
   team: string;
 }
 
-export function DraftDetailsModal({ isOpen, onClose, draftId, draftName, totalPool }: DraftDetailsModalProps) {
+export function DraftDetailsModal({ isOpen, onClose, draftId, totalPool }: DraftDetailsModalProps) {
   const { account } = useWallet();
   const [expandedParticipant, setExpandedParticipant] = useState<string | null>(null);
   
@@ -57,7 +56,7 @@ export function DraftDetailsModal({ isOpen, onClose, draftId, draftName, totalPo
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Eye className="h-5 w-5 text-blue-500" />
-            <span>{draftName || `Draft #${draftId}`}</span>
+            <span>Draft #{draftId}</span>
           </DialogTitle>
           <DialogDescription className="text-gray-400">
             View all participants in this draft
