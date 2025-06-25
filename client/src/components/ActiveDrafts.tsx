@@ -4,11 +4,14 @@ import { Button } from '@/components/ui/button';
 import { RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 import { PlayerSelectionModal } from './PlayerSelectionModal';
+import { ResolveDraftModal } from './ResolveDraftModal';
 
 export function ActiveDrafts() {
   const { data: drafts = [], isLoading, refetch } = useActiveDrafts();
   const [selectedDraftId, setSelectedDraftId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [resolveDraftId, setResolveDraftId] = useState<number | null>(null);
+  const [isResolveModalOpen, setIsResolveModalOpen] = useState(false);
 
   const handleJoinDraft = (draftId: number) => {
     setSelectedDraftId(draftId);
@@ -23,6 +26,11 @@ export function ActiveDrafts() {
   const handleEditLineup = (draftId: number) => {
     setSelectedDraftId(draftId);
     setIsModalOpen(true);
+  };
+
+  const handleResolveDraft = (draftId: number) => {
+    setResolveDraftId(draftId);
+    setIsResolveModalOpen(true);
   };
 
   const handleRefresh = () => {
@@ -67,6 +75,7 @@ export function ActiveDrafts() {
                 onJoinDraft={handleJoinDraft}
                 onViewDraft={handleViewDraft}
                 onEditLineup={handleEditLineup}
+                onResolveDraft={handleResolveDraft}
               />
             ))}
           </div>
@@ -77,6 +86,12 @@ export function ActiveDrafts() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         draftId={selectedDraftId}
+      />
+
+      <ResolveDraftModal
+        isOpen={isResolveModalOpen}
+        onClose={() => setIsResolveModalOpen(false)}
+        draftId={resolveDraftId}
       />
     </>
   );

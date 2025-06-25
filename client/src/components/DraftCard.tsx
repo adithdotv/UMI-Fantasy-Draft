@@ -2,8 +2,8 @@ import { ContractDraft } from '@/lib/contract';
 import { CountdownTimer } from './CountdownTimer';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Eye, Edit, Check } from 'lucide-react';
-import { useDraftParticipants, usePlayerSelection, useEntryFee } from '@/hooks/useContract';
+import { Plus, Eye, Edit, Check, Trophy, Clock } from 'lucide-react';
+import { useDraftParticipants, usePlayerSelection, useEntryFee, useContractOwner } from '@/hooks/useContract';
 import { useWallet } from '@/hooks/useWallet';
 import { formatChzAmount } from '@/lib/web3';
 
@@ -12,18 +12,27 @@ interface DraftCardProps {
   onJoinDraft: (draftId: number) => void;
   onViewDraft: (draftId: number) => void;
   onEditLineup?: (draftId: number) => void;
+  onResolveDraft?: (draftId: number) => void;
 }
 
-export function DraftCard({ draft, onJoinDraft, onViewDraft, onEditLineup }: DraftCardProps) {
+export function DraftCard({ draft, onJoinDraft, onViewDraft, onEditLineup, onResolveDraft }: DraftCardProps) {
   const { account } = useWallet();
   const { data: participants = [] } = useDraftParticipants(Number(draft.id));
   const { data: playerSelection } = usePlayerSelection(Number(draft.id), account || '');
   const { data: entryFee = '0' } = useEntryFee();
+  const { data: contractOwner } = useContractOwner();
   
   const hasJoined = account && participants.includes(account);
   const prizePool = formatChzAmount(draft.totalPool.toString());
+  const isOwner = account && contractOwner && account.toLowerCase() === contractOwner.toLowerCase();
+  const now = Math.floor(Date.now() / 1000);
+  const isExpired = now > Number(draft.deadline);
+  const canResolve = isOwner && isExpired && draft.isActive;
 
   const getStatusBadge = () => {
+    if (isExpired) {
+      return <Badge variant="destructive" className="bg-red-600/20 text-red-400">EXPIRED</Badge>;
+    }
     if (hasJoined) {
       return <Badge variant="secondary" className="bg-slate-600 text-slate-300">JOINED</Badge>;
     }
@@ -65,7 +74,15 @@ export function DraftCard({ draft, onJoinDraft, onViewDraft, onEditLineup }: Dra
       </div>
       
       <div className="flex space-x-3">
-        {hasJoined ? (
+        {canResolve ? (
+          <Button 
+            onClick={() => onResolveDraft && onResolveDraft(Number(draft.id))}
+            className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
+          >
+            <Trophy className="mr-2 h-4 w-4" />
+            Resolve Draft
+          </Button>
+        ) : hasJoined ? (
           <>
             <Button 
               variant="secondary" 
@@ -75,7 +92,7 @@ export function DraftCard({ draft, onJoinDraft, onViewDraft, onEditLineup }: Dra
               <Check className="mr-2 h-4 w-4" />
               Already Joined
             </Button>
-            {onEditLineup && (
+            {onEditLineup && !isExpired && (
               <Button 
                 onClick={() => onEditLineup(Number(draft.id))}
                 className="bg-accent-blue hover:bg-blue-600 text-white"
@@ -84,6 +101,15 @@ export function DraftCard({ draft, onJoinDraft, onViewDraft, onEditLineup }: Dra
               </Button>
             )}
           </>
+        ) : isExpired ? (
+          <Button 
+            variant="secondary" 
+            className="flex-1 bg-slate-700 text-slate-300 cursor-not-allowed"
+            disabled
+          >
+            <Clock className="mr-2 h-4 w-4" />
+            Draft Expired
+          </Button>
         ) : (
           <Button 
             onClick={() => onJoinDraft(Number(draft.id))}
