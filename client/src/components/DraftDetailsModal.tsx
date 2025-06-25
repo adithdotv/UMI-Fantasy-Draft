@@ -138,13 +138,19 @@ function ParticipantCard({
     const positions = ['GK', 'DEF', 'MID', 'ATT'];
     const positionGroups: Record<string, Player[]> = {};
     
+    // Initialize all position arrays
     positions.forEach(pos => {
       positionGroups[pos] = [];
     });
 
+    // Only process if we have valid data
+    if (!Array.isArray(playerIds) || !Array.isArray(players)) {
+      return positionGroups;
+    }
+
     playerIds.forEach(id => {
       const player = players.find(p => p.id === id);
-      if (player) {
+      if (player && player.position && positionGroups[player.position]) {
         positionGroups[player.position].push(player);
       }
     });
