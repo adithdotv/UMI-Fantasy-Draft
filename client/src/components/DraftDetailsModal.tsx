@@ -64,7 +64,7 @@ export function DraftDetailsModal({ isOpen, onClose, draftId, draftName, totalPo
                   <div key={participant} className="bg-gray-800 rounded-lg p-4">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <Badge variant="outline" className="text-xs">
+                        <Badge variant="outline" className="text-xs text-[#f4f4f5]">
                           #{index + 1}
                         </Badge>
                         <span className="font-medium text-sm">
