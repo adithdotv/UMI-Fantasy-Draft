@@ -3,8 +3,18 @@ import { HeroSection } from '@/components/HeroSection';
 import { DraftStats } from '@/components/DraftStats';
 import { ActiveDrafts } from '@/components/ActiveDrafts';
 import { Leaderboard } from '@/components/Leaderboard';
+import { AdminPanel } from '@/components/AdminPanel';
+import { useWallet } from '@/hooks/useWallet';
+import { useContractOwner } from '@/hooks/useContract';
+import { Separator } from '@/components/ui/separator';
 
 export function Dashboard() {
+  const { account, isConnected } = useWallet();
+  const { data: contractOwner } = useContractOwner();
+  
+  const isOwner = isConnected && account && contractOwner && 
+    account.toLowerCase() === contractOwner.toLowerCase();
+
   return (
     <div className="min-h-screen bg-primary-dark text-slate-50">
       <Header />
@@ -12,6 +22,14 @@ export function Dashboard() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <HeroSection />
         <DraftStats />
+        
+        {isOwner && (
+          <>
+            <AdminPanel />
+            <Separator className="bg-gray-700 my-8" />
+          </>
+        )}
+        
         <ActiveDrafts />
         <Leaderboard />
       </main>

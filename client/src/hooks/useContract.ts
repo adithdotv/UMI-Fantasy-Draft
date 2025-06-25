@@ -80,3 +80,14 @@ export function useEntryFee() {
     },
   });
 }
+
+export function useContractOwner() {
+  return useQuery({
+    queryKey: ['/api/contract-owner'],
+    queryFn: async () => {
+      const owner = await fanDraftContract.getOwner();
+      return owner;
+    },
+    staleTime: 5 * 60 * 1000, // Owner doesn't change often
+  });
+}

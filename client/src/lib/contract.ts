@@ -119,6 +119,40 @@ export class FanDraftContract {
     const wins = await contract.totalWins(address);
     return Number(wins);
   }
+
+  async getOwner(): Promise<string> {
+    const contract = await this.getContract();
+    return await contract.owner();
+  }
+
+  async createDraft(name: string, durationHours: number): Promise<string> {
+    const contract = await this.getContract(true);
+    const durationSeconds = durationHours * 3600; // Convert hours to seconds
+    const tx = await contract.createDraft(name, durationSeconds);
+    await tx.wait();
+    return tx.hash;
+  }
+
+  async resolveDraft(draftId: number, winnerAddresses: string[], scores: number[]): Promise<string> {
+    const contract = await this.getContract(true);
+    const tx = await contract.resolveDraft(draftId, winnerAddresses, scores);
+    await tx.wait();
+    return tx.hash;
+  }
+
+  async changeEntryFee(newFeeInChz: string): Promise<string> {
+    const contract = await this.getContract(true);
+    const tx = await contract.changeEntryFee(ethers.parseEther(newFeeInChz));
+    await tx.wait();
+    return tx.hash;
+  }
+
+  async withdrawRevenue(): Promise<string> {
+    const contract = await this.getContract(true);
+    const tx = await contract.withdrawRevenue();
+    await tx.wait();
+    return tx.hash;
+  }
 }
 
 export const fanDraftContract = new FanDraftContract();
