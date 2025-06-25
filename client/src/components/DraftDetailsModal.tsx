@@ -135,7 +135,7 @@ function ParticipantCard({
   const { data: playerSelection = [] } = usePlayerSelection(draftId || 0, participant);
 
   const getPlayersByPosition = (playerIds: number[]) => {
-    const positions = ['GK', 'DEF', 'MID', 'ATT'];
+    const positions = ['GK', 'DEF', 'MID', 'FWD'];
     const positionGroups: Record<string, Player[]> = {};
     
     // Initialize all position arrays
@@ -195,7 +195,7 @@ function ParticipantCard({
         <div className="mt-4 border-t border-gray-700 pt-4">
           {playerSelection.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-              {['GK', 'DEF', 'MID', 'ATT'].map(position => (
+              {['GK', 'DEF', 'MID', 'FWD'].map(position => (
                 <div key={position} className="space-y-2">
                   <h4 className="text-xs font-semibold text-gray-400 uppercase">
                     {position} ({positionGroups[position].length})
