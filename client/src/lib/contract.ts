@@ -1,15 +1,17 @@
 import { ethers } from 'ethers';
 import { getSigner, getProvider } from './web3';
 
-export const CONTRACT_ADDRESS = '0x33033b2D6E540585a75f744e605F2E9406Be2910';
+export const CONTRACT_ADDRESS = '0x7388FfE07dd833a65f6b1D38B9bF398612e96d0c';
 
 export const CONTRACT_ABI = [
   "function owner() view returns (address)",
   "function draftCounter() view returns (uint256)",
   "function entryFee() view returns (uint256)",
   "function platformRevenue() view returns (uint256)",
-  "function drafts(uint256) view returns (uint256 id, string name, bool isActive, uint256 totalPool, uint256 deadline)",
-  "function getDraft(uint256 draftId) view returns (uint256 id, string name, bool isActive, address[] participants, address[] winners, uint256 totalPool, uint256 deadline)",
+  "function drafts(uint256) view returns (uint256 id, bool isActive, uint256 totalPool, uint256 deadline)",
+  "function getDraft(uint256 draftId) view returns (uint256 id, bool isActive, uint256 totalPool, uint256 deadline)",
+  "function getDraftName(uint256 draftId) view returns (string)",
+  "function getAllDraftNames() view returns (string[])",
   "function totalWins(address) view returns (uint256)",
   "function createDraft(string memory draftName, uint256 durationSeconds)",
   "function joinDraft(uint256 draftId, uint256[] memory selectedPlayers) payable",
@@ -64,15 +66,18 @@ export class FanDraftContract {
     try {
       const contract = await this.getContract();
       const draft = await contract.getDraft(draftId);
+      const name = await contract.getDraftName(draftId);
+      const participants = await contract.getParticipants(draftId);
+      const winners = await contract.getDraftWinners(draftId);
       
       return {
         id: draft[0],
-        name: draft[1],
-        isActive: draft[2],
-        participants: draft[3],
-        winners: draft[4],
-        totalPool: draft[5],
-        deadline: draft[6],
+        name: name,
+        isActive: draft[1],
+        totalPool: draft[2],
+        deadline: draft[3],
+        participants: participants,
+        winners: winners,
       };
     } catch (error) {
       console.error('Error fetching draft:', error);

@@ -31,7 +31,7 @@ FanDraft is a blockchain-based fantasy football platform built on the Chiliz tes
 
 ### Smart Contract Integration
 - **Blockchain**: Chiliz testnet (Chain ID: 88882)
-- **Contract Address**: `0x33033b2D6E540585a75f744e605F2E9406Be2910`
+- **Contract Address**: `0x7388FfE07dd833a65f6b1D38B9bF398612e96d0c`
 - **Token**: CHZ (native Chiliz token)
 - **Features**: Draft creation, player selection, automatic prize distribution
 
@@ -103,6 +103,7 @@ FanDraft is a blockchain-based fantasy football platform built on the Chiliz tes
 - June 25, 2025: Updated smart contract address to 0xFA81A5b5a9e0ebe9194d45b47ad553EE05AeEBD7
 - June 25, 2025: Updated contract interface to use new getDraft function with participants and winners data
 - June 25, 2025: Updated smart contract address to 0x33033b2D6E540585a75f744e605F2E9406Be2910
+- June 25, 2025: Updated to new contract address 0x7388FfE07dd833a65f6b1D38B9bF398612e96d0c with separate draft name storage
 
 ## User Preferences
 
