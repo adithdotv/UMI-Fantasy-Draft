@@ -1,5 +1,5 @@
-import { Calendar, Trophy, Medal, Users } from 'lucide-react';
-import { useActiveDrafts, useUserWins } from '@/hooks/useContract';
+import { Calendar, Trophy, Medal, Users, DollarSign } from 'lucide-react';
+import { useActiveDrafts, useUserWins, usePlatformRevenue } from '@/hooks/useContract';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { formatChzAmount } from '@/lib/web3';
@@ -7,6 +7,7 @@ import { formatChzAmount } from '@/lib/web3';
 export function DraftStats() {
   const { data: activeDrafts = [] } = useActiveDrafts();
   const { data: userWins = 0 } = useUserWins();
+  const { data: platformRevenue = '0' } = usePlatformRevenue();
   
   const { data: stats } = useQuery({
     queryKey: ['/api/stats'],
@@ -22,7 +23,7 @@ export function DraftStats() {
   }, 0);
 
   return (
-    <section className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+    <section className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-12">
       <div className="bg-secondary-dark p-6 rounded-xl border border-slate-700">
         <div className="flex items-center justify-between">
           <div>
@@ -62,6 +63,18 @@ export function DraftStats() {
             <p className="text-2xl font-bold text-slate-50">{stats?.totalPlayers || 0}</p>
           </div>
           <Users className="h-8 w-8 text-accent-blue" />
+        </div>
+      </div>
+      
+      <div className="bg-secondary-dark p-6 rounded-xl border border-slate-700">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-slate-400 text-sm">Platform Revenue</p>
+            <p className="text-2xl font-bold text-slate-50">
+              {parseFloat(platformRevenue).toFixed(2)} CHZ
+            </p>
+          </div>
+          <DollarSign className="h-8 w-8 text-purple-500" />
         </div>
       </div>
     </section>

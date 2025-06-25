@@ -145,3 +145,13 @@ export function useBlockchainLeaderboard() {
     staleTime: 30000, // Cache for 30 seconds
   });
 }
+
+export function usePlatformRevenue() {
+  return useQuery({
+    queryKey: ['platformRevenue'],
+    queryFn: async () => {
+      return await fanDraftContract.getPlatformRevenue();
+    },
+    staleTime: 15000, // Cache for 15 seconds
+  });
+}

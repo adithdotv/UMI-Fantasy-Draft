@@ -177,6 +177,14 @@ export class FanDraftContract {
     await tx.wait();
     return tx.hash;
   }
+
+  async getPlatformRevenue(): Promise<string> {
+    const provider = getProvider();
+    if (!provider) throw new Error('No provider available');
+    
+    const balance = await provider.getBalance(CONTRACT_ADDRESS);
+    return ethers.formatEther(balance);
+  }
 }
 
 export const fanDraftContract = new FanDraftContract();
