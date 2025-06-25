@@ -78,9 +78,10 @@ export class FanDraftContract {
       }
       
       try {
-        winners = await contract.getDraftWinners(draftId);
+        const winner = await contract.getDraftWinner(draftId);
+        winners = winner && winner !== '0x0000000000000000000000000000000000000000' ? [winner] : [];
       } catch (e) {
-        console.warn('Could not fetch winners for draft', draftId);
+        console.warn('Could not fetch winner for draft', draftId);
       }
       
       return {
