@@ -2,6 +2,7 @@ import { Calendar, Trophy, Medal, Users } from 'lucide-react';
 import { useActiveDrafts, useUserWins } from '@/hooks/useContract';
 import { useQuery } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
+import { formatChzAmount } from '@/lib/web3';
 
 export function DraftStats() {
   const { data: activeDrafts = [] } = useActiveDrafts();
@@ -16,7 +17,8 @@ export function DraftStats() {
   });
 
   const totalPrizePool = activeDrafts.reduce((sum, draft) => {
-    return sum + parseFloat(draft.totalPool.toString());
+    const poolInChz = parseFloat(formatChzAmount(draft.totalPool.toString()));
+    return sum + poolInChz;
   }, 0);
 
   return (
@@ -36,7 +38,7 @@ export function DraftStats() {
           <div>
             <p className="text-slate-400 text-sm">Total Prize Pool</p>
             <p className="text-2xl font-bold text-slate-50">
-              {totalPrizePool.toFixed(0)} CHZ
+              {totalPrizePool.toFixed(2)} CHZ
             </p>
           </div>
           <Trophy className="h-8 w-8 text-yellow-500" />
