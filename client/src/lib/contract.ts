@@ -66,13 +66,26 @@ export class FanDraftContract {
     try {
       const contract = await this.getContract();
       const draft = await contract.getDraft(draftId);
-      const name = await contract.getDraftName(draftId);
-      const participants = await contract.getParticipants(draftId);
-      const winners = await contract.getDraftWinners(draftId);
+      
+      // Fetch additional data with error handling
+      let participants: string[] = [];
+      let winners: string[] = [];
+      
+      try {
+        participants = await contract.getParticipants(draftId);
+      } catch (e) {
+        console.warn('Could not fetch participants for draft', draftId);
+      }
+      
+      try {
+        winners = await contract.getDraftWinners(draftId);
+      } catch (e) {
+        console.warn('Could not fetch winners for draft', draftId);
+      }
       
       return {
         id: draft[0],
-        name: name,
+        name: `Draft #${draftId}`,
         isActive: draft[1],
         totalPool: draft[2],
         deadline: draft[3],
