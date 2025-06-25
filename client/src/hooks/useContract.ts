@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { fanDraftContract, ContractDraft } from '@/lib/contract';
 import { useWallet } from './useWallet';
+import { formatChzAmount } from '@/lib/web3';
 
 export function useActiveDrafts() {
   return useQuery({

@@ -115,6 +115,7 @@ FanDraft is a blockchain-based fantasy football platform built on the Chiliz tes
 - June 25, 2025: Removed draft name field from entire application, drafts now display as "Draft #ID" format
 - June 25, 2025: Updated total players stat to use real blockchain data from unique participants across all drafts instead of mock storage data
 - June 25, 2025: Added comprehensive My History section showing user's draft participation history with win status and detailed view
+- June 25, 2025: Fixed leaderboard calculations to use real blockchain data for accurate total earnings and win percentages based on actual draft participation
 
 ## User Preferences
 
