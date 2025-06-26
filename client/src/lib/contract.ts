@@ -21,6 +21,7 @@ export const CONTRACT_ABI = [
   "function getDraftWinner(uint256 draftId) view returns (address)",
   "function withdrawRevenue()",
   "function changeEntryFee(uint256 newFee)",
+  "function getLeaderboard(address player) view returns (uint256 totalGames, uint256 wins, uint256 totalWinnings, uint256 winRate)",
   "event DraftResolved(uint256 indexed draftId, address winner, uint256 score)"
 ];
 
@@ -182,6 +183,33 @@ export class FanDraftContract {
     
     const balance = await provider.getBalance(CONTRACT_ADDRESS);
     return ethers.formatEther(balance);
+  }
+
+  async getPlayerLeaderboardStats(address: string): Promise<{
+    totalGames: number;
+    wins: number;
+    totalWinnings: string;
+    winRate: number;
+  }> {
+    try {
+      const contract = await this.getContract();
+      const [totalGames, wins, totalWinnings, winRate] = await contract.getLeaderboard(address);
+      
+      return {
+        totalGames: Number(totalGames),
+        wins: Number(wins),
+        totalWinnings: ethers.formatEther(totalWinnings),
+        winRate: Number(winRate),
+      };
+    } catch (error) {
+      console.error('Error getting player leaderboard stats:', error);
+      return {
+        totalGames: 0,
+        wins: 0,
+        totalWinnings: '0',
+        winRate: 0,
+      };
+    }
   }
 }
 

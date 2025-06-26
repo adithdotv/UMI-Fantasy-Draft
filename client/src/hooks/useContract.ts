@@ -113,23 +113,26 @@ export function useBlockchainLeaderboard() {
           }
         }
         
-        // Get win counts for each participant
+        // Get detailed stats for each participant using the new contract function
         const leaderboardData = await Promise.all(
           Array.from(allParticipants).map(async (address) => {
             try {
-              const wins = await fanDraftContract.getUserWins(address);
+              const stats = await fanDraftContract.getPlayerLeaderboardStats(address);
               return {
                 userAddress: address,
-                totalWins: wins,
-                totalEarnings: wins * 10, // Approximate earnings based on wins
-                gamesPlayed: Math.max(wins, 1), // Minimum 1 to avoid division by zero
+                totalWins: stats.wins,
+                totalEarnings: parseFloat(stats.totalWinnings),
+                gamesPlayed: Math.max(stats.totalGames, 1), // Minimum 1 to avoid division by zero
+                winRate: stats.winRate,
               };
             } catch (e) {
+              console.warn('Could not fetch stats for user', address);
               return {
                 userAddress: address,
                 totalWins: 0,
                 totalEarnings: 0,
                 gamesPlayed: 1,
+                winRate: 0,
               };
             }
           })
