@@ -13,7 +13,7 @@ export const CONTRACT_ABI = [
   "function getDraftName(uint256 draftId) view returns (string)",
   "function getAllDraftNames() view returns (string[])",
   "function totalWins(address) view returns (uint256)",
-  "function createDraft(uint256 durationSeconds)",
+  "function createDraft(string memory draftName, uint256 durationSeconds)",
   "function joinDraft(uint256 draftId, uint256[] memory selectedPlayers) payable",
   "function resolveDraft(uint256 draftId, address winner, uint256 score)",
   "function getParticipants(uint256 draftId) view returns (address[])",
@@ -148,10 +148,10 @@ export class FanDraftContract {
     return await contract.owner();
   }
 
-  async createDraft(durationHours: number): Promise<string> {
+  async createDraft(name: string, durationHours: number): Promise<string> {
     const contract = await this.getContract(true);
     const durationSeconds = durationHours * 3600; // Convert hours to seconds
-    const tx = await contract.createDraft(durationSeconds);
+    const tx = await contract.createDraft(name, durationSeconds);
     await tx.wait();
     return tx.hash;
   }
