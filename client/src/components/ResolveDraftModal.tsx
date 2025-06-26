@@ -91,7 +91,7 @@ export function ResolveDraftModal({ isOpen, onClose, draftId }: ResolveDraftModa
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Trophy className="h-5 w-5 text-yellow-500" />
-            <span>Resolve Draft #{draftId}</span>
+            <span>Resolve Premier League Week {draftId}</span>
           </DialogTitle>
           <DialogDescription className="text-gray-400">
             Select the winner and their score to distribute the prize.

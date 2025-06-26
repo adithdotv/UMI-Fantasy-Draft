@@ -1,5 +1,6 @@
 import { useBlockchainLeaderboard } from '@/hooks/useContract';
 import { useWallet } from '@/hooks/useWallet';
+import { SocialShare } from './SocialShare';
 
 export function Leaderboard() {
   const { data: leaderboard = [], isLoading } = useBlockchainLeaderboard();
@@ -114,6 +115,18 @@ export function Leaderboard() {
                         {parseFloat(player.totalEarnings).toFixed(0)} CHZ
                       </td>
                       <td className="px-6 py-4 text-slate-50">{winRate}%</td>
+                      <td className="px-6 py-4">
+                        <SocialShare 
+                          playerStats={{
+                            userAddress: player.userAddress,
+                            totalWins: player.totalWins,
+                            totalEarnings: player.totalEarnings,
+                            gamesPlayed: player.gamesPlayed,
+                            winRate: player.winRate || 0,
+                            rank: index + 1,
+                          }}
+                        />
+                      </td>
                     </tr>
                   );
                 })

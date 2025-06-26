@@ -43,8 +43,8 @@ export function DraftCard({ draft, onJoinDraft, onViewDraft, onEditLineup, onRes
     <div className="bg-secondary-dark border border-slate-700 rounded-xl p-6">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h4 className="text-xl font-semibold text-slate-50">Draft #{Number(draft.id)}</h4>
-          <p className="text-slate-400 text-sm">Fantasy Draft Tournament</p>
+          <h4 className="text-xl font-semibold text-slate-50">Premier League Week {Number(draft.id)}</h4>
+          <p className="text-slate-400 text-sm">Fantasy Tournament</p>
         </div>
         <div className="flex items-center space-x-2">
           {getStatusBadge()}

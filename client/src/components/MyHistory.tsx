@@ -146,10 +146,10 @@ export function MyHistory() {
               <Card key={draft.draftId} className="bg-secondary-dark border-slate-700">
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-slate-50">Draft #{draft.draftId}</CardTitle>
+                    <CardTitle className="text-slate-50">Premier League Week {draft.draftId}</CardTitle>
                     {getStatusBadge(draft)}
                   </div>
-                  <CardDescription>Fantasy Draft Tournament</CardDescription>
+                  <CardDescription>Fantasy Tournament</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 gap-4">

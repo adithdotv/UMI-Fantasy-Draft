@@ -56,7 +56,7 @@ export function DraftDetailsModal({ isOpen, onClose, draftId, totalPool }: Draft
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2">
             <Eye className="h-5 w-5 text-blue-500" />
-            <span>Draft #{draftId}</span>
+            <span>Premier League Week {draftId}</span>
           </DialogTitle>
           <DialogDescription className="text-gray-400">
             View all participants in this draft
