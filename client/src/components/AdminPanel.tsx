@@ -225,7 +225,7 @@ export function AdminPanel() {
               <div>
                 <p className="text-slate-400 text-sm">Available Revenue</p>
                 <p className="text-2xl font-bold text-slate-50">
-                  {parseFloat(platformRevenue).toFixed(2)} CHZ
+                  {parseFloat(platformRevenue).toFixed(1)} CHZ
                 </p>
               </div>
               <DollarSign className="h-8 w-8 text-green-500" />

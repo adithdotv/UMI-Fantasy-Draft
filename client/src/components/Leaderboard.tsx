@@ -112,7 +112,7 @@ export function Leaderboard() {
                       </td>
                       <td className="px-6 py-4 text-slate-50 font-semibold">{player.totalWins}</td>
                       <td className="px-6 py-4 text-accent-green font-semibold">
-                        {parseFloat(player.totalEarnings).toFixed(0)} CHZ
+                        {parseFloat(player.totalEarnings).toFixed(1)} CHZ
                       </td>
                       <td className="px-6 py-4 text-slate-50">{winRate}%</td>
                       <td className="px-6 py-4">
