@@ -8,6 +8,7 @@ export function UserStatsShare() {
   const { account } = useWallet();
   const { data: leaderboard = [] } = useBlockchainLeaderboard();
 
+  // Only show if user is connected
   if (!account) {
     return null;
   }
@@ -22,7 +23,8 @@ export function UserStatsShare() {
     player.userAddress.toLowerCase() === account.toLowerCase()
   ) + 1;
 
-  if (!userStats) {
+  // Only show if user has stats to share
+  if (!userStats || userStats.gamesPlayed === 0) {
     return null;
   }
 

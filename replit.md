@@ -121,6 +121,7 @@ FanDraft is a blockchain-based fantasy football platform built on the Chiliz tes
 - June 26, 2025: Updated to new contract address 0xcb4626a80F60b713525192862191881e4Daf2CD8 with enhanced getLeaderboard function for accurate player statistics
 - June 26, 2025: Renamed all draft names to "Premier League Week" format throughout application
 - June 26, 2025: Implemented comprehensive social sharing features for player stats with Twitter sharing, native sharing, and clipboard functionality
+- June 26, 2025: Restricted social sharing to only allow users to share their own stats for privacy protection
 
 ## User Preferences
 

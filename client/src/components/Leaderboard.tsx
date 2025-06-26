@@ -116,16 +116,20 @@ export function Leaderboard() {
                       </td>
                       <td className="px-6 py-4 text-slate-50">{winRate}%</td>
                       <td className="px-6 py-4">
-                        <SocialShare 
-                          playerStats={{
-                            userAddress: player.userAddress,
-                            totalWins: player.totalWins,
-                            totalEarnings: player.totalEarnings,
-                            gamesPlayed: player.gamesPlayed,
-                            winRate: player.winRate || 0,
-                            rank: index + 1,
-                          }}
-                        />
+                        {account && player.userAddress.toLowerCase() === account.toLowerCase() ? (
+                          <SocialShare 
+                            playerStats={{
+                              userAddress: player.userAddress,
+                              totalWins: player.totalWins,
+                              totalEarnings: player.totalEarnings,
+                              gamesPlayed: player.gamesPlayed,
+                              winRate: player.winRate || 0,
+                              rank: index + 1,
+                            }}
+                          />
+                        ) : (
+                          <span className="text-slate-500 text-sm">-</span>
+                        )}
                       </td>
                     </tr>
                   );
