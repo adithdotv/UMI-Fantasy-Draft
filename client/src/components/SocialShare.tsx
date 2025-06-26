@@ -46,7 +46,7 @@ Join me in Premier League fantasy tournaments on the Chiliz blockchain!
   };
 
   const handleNativeShare = async () => {
-    if (navigator.share) {
+    if (typeof window !== 'undefined' && 'share' in navigator) {
       try {
         await navigator.share(shareData);
       } catch (error) {
@@ -92,7 +92,7 @@ Join me in Premier League fantasy tournaments on the Chiliz blockchain!
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="stat-card max-w-lg">
+      <DialogContent className="bg-gray-900 border-gray-700 text-white max-w-lg fixed-modal">
         <DialogHeader>
           <DialogTitle className="flex items-center space-x-2 text-slate-50">
             <Share2 className="h-5 w-5 text-accent-green" />
@@ -105,7 +105,7 @@ Join me in Premier League fantasy tournaments on the Chiliz blockchain!
 
         <div className="space-y-6">
           {/* Stats Preview Card */}
-          <div className="draft-card p-6 rounded-2xl">
+          <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl">
             <div className="text-center mb-6">
               <h3 className="text-xl font-bold text-slate-50 mb-2">
                 🏆 FanDraft Champion
@@ -121,25 +121,25 @@ Join me in Premier League fantasy tournaments on the Chiliz blockchain!
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="stat-card p-4 rounded-xl text-center">
+              <div className="bg-slate-700/50 border border-slate-600 p-4 rounded-xl text-center">
                 <Trophy className="h-6 w-6 text-yellow-500 mx-auto mb-2" />
                 <div className="text-2xl font-black text-slate-50">{playerStats.totalWins}</div>
                 <div className="text-xs text-slate-400">Victories</div>
               </div>
               
-              <div className="stat-card p-4 rounded-xl text-center">
+              <div className="bg-slate-700/50 border border-slate-600 p-4 rounded-xl text-center">
                 <DollarSign className="h-6 w-6 text-accent-green mx-auto mb-2" />
                 <div className="text-2xl font-black text-slate-50">{playerStats.totalEarnings.toFixed(1)}</div>
                 <div className="text-xs text-slate-400">CHZ Earned</div>
               </div>
               
-              <div className="stat-card p-4 rounded-xl text-center">
+              <div className="bg-slate-700/50 border border-slate-600 p-4 rounded-xl text-center">
                 <Users className="h-6 w-6 text-accent-blue mx-auto mb-2" />
                 <div className="text-2xl font-black text-slate-50">{playerStats.gamesPlayed}</div>
                 <div className="text-xs text-slate-400">Games</div>
               </div>
               
-              <div className="stat-card p-4 rounded-xl text-center">
+              <div className="bg-slate-700/50 border border-slate-600 p-4 rounded-xl text-center">
                 <Medal className="h-6 w-6 text-purple-500 mx-auto mb-2" />
                 <div className="text-2xl font-black text-slate-50">{playerStats.winRate}%</div>
                 <div className="text-xs text-slate-400">Win Rate</div>
@@ -158,7 +158,7 @@ Join me in Premier League fantasy tournaments on the Chiliz blockchain!
             <h4 className="text-sm font-semibold text-slate-400">Share via:</h4>
             
             <div className="grid grid-cols-1 gap-3">
-              {typeof navigator !== 'undefined' && navigator.share && (
+              {typeof window !== 'undefined' && 'share' in navigator && (
                 <Button
                   onClick={handleNativeShare}
                   className="w-full bg-gradient-to-r from-accent-green to-accent-blue text-white hover:opacity-90"

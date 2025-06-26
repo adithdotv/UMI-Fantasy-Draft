@@ -229,3 +229,30 @@
 .bg-accent-blue {
   background-color: var(--accent-blue);
 }
+
+/* Fixed Modal Positioning */
+.fixed-modal {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 50;
+  pointer-events: auto;
+}
+
+.fixed-modal:hover {
+  transform: translate(-50%, -50%) !important;
+}
+
+/* Disable transforms that might interfere with modal positioning */
+.fixed-modal .stat-card:hover {
+  transform: none !important;
+}
+
+.fixed-modal .hover-lift:hover {
+  transform: none !important;
+}
+
+.fixed-modal .draft-card:hover {
+  transform: none !important;
+}
