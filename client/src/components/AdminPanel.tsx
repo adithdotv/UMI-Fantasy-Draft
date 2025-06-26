@@ -35,7 +35,7 @@ export function AdminPanel() {
 
   const createDraftMutation = useMutation({
     mutationFn: async ({ duration }: { duration: number }) => {
-      return await fanDraftContract.createDraft("Premier League Week", duration);
+      return await fanDraftContract.createDraft(duration);
     },
     onSuccess: () => {
       toast({

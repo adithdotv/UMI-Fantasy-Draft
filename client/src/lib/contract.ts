@@ -148,7 +148,7 @@ export class FanDraftContract {
     return await contract.owner();
   }
 
-  async createDraft(name: string, durationHours: number): Promise<string> {
+  async createDraft(durationHours: number): Promise<string> {
     const contract = await this.getContract(true);
     const durationSeconds = durationHours * 3600; // Convert hours to seconds
     const tx = await contract.createDraft(durationSeconds);
