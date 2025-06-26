@@ -1,36 +1,49 @@
-import { useState } from 'react';
-import { useWallet } from '@/hooks/useWallet';
-import { fanDraftContract } from '@/lib/contract';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Separator } from '@/components/ui/separator';
-import { useToast } from '@/hooks/use-toast';
-import { Loader2, Plus, Settings, DollarSign, Download, Wallet } from 'lucide-react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { usePlatformRevenue } from '@/hooks/useContract';
+import { useState } from "react";
+import { useWallet } from "@/hooks/useWallet";
+import { fanDraftContract } from "@/lib/contract";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Loader2,
+  Plus,
+  Settings,
+  DollarSign,
+  Download,
+  Wallet,
+} from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { usePlatformRevenue } from "@/hooks/useContract";
 
 export function AdminPanel() {
   const { account } = useWallet();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  const { data: platformRevenue = '0' } = usePlatformRevenue();
-  
-  const [draftDuration, setDraftDuration] = useState('24');
-  const [newEntryFee, setNewEntryFee] = useState('');
+  const { data: platformRevenue = "0" } = usePlatformRevenue();
+
+  const [draftDuration, setDraftDuration] = useState("24");
+  const [newEntryFee, setNewEntryFee] = useState("");
 
   const createDraftMutation = useMutation({
     mutationFn: async ({ duration }: { duration: number }) => {
-      return await fanDraftContract.createDraft('', duration);
+      return await fanDraftContract.createDraft("", duration);
     },
     onSuccess: () => {
       toast({
         title: "Draft Created",
         description: "New draft has been created successfully",
       });
-      setDraftDuration('24');
-      queryClient.invalidateQueries({ queryKey: ['/api/active-drafts'] });
+      setDraftDuration("24");
+      queryClient.invalidateQueries({ queryKey: ["/api/active-drafts"] });
     },
     onError: (error: any) => {
       toast({
@@ -50,8 +63,8 @@ export function AdminPanel() {
         title: "Entry Fee Updated",
         description: "Entry fee has been changed successfully",
       });
-      setNewEntryFee('');
-      queryClient.invalidateQueries({ queryKey: ['/api/entry-fee'] });
+      setNewEntryFee("");
+      queryClient.invalidateQueries({ queryKey: ["/api/entry-fee"] });
     },
     onError: (error: any) => {
       toast({
@@ -71,7 +84,7 @@ export function AdminPanel() {
         title: "Revenue Withdrawn",
         description: `Successfully withdrew ${parseFloat(platformRevenue).toFixed(2)} CHZ`,
       });
-      queryClient.invalidateQueries({ queryKey: ['platformRevenue'] });
+      queryClient.invalidateQueries({ queryKey: ["platformRevenue"] });
     },
     onError: (error: any) => {
       toast({
@@ -84,9 +97,10 @@ export function AdminPanel() {
 
   const handleCreateDraft = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const duration = parseInt(draftDuration);
-    if (duration < 1 || duration > 168) { // Max 1 week
+    if (duration < 1 || duration > 168) {
+      // Max 1 week
       toast({
         title: "Invalid Duration",
         description: "Duration must be between 1 and 168 hours",
@@ -126,7 +140,7 @@ export function AdminPanel() {
         <Settings className="h-5 w-5 text-accent-green" />
         <h2 className="text-xl font-bold text-white">Admin Panel</h2>
       </div>
-      
+
       <div className="grid gap-6 md:grid-cols-2">
         {/* Create Draft */}
         <Card className="bg-gray-800/50 border-gray-700">
@@ -135,12 +149,16 @@ export function AdminPanel() {
               <Plus className="h-4 w-4" />
               <span>Create New Draft</span>
             </CardTitle>
-            <CardDescription>Create a new fantasy draft for users to participate in</CardDescription>
+            <CardDescription>
+              Create a new fantasy draft for users to participate in
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleCreateDraft} className="space-y-4">
               <div>
-                <Label htmlFor="draftDuration" className="text-gray-300">Duration (hours)</Label>
+                <Label htmlFor="draftDuration" className="text-gray-300">
+                  Duration (hours)
+                </Label>
                 <Input
                   id="draftDuration"
                   type="number"
@@ -151,8 +169,8 @@ export function AdminPanel() {
                   className="bg-gray-700 border-gray-600 text-white"
                 />
               </div>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={createDraftMutation.isPending}
                 className="w-full bg-accent-green hover:bg-emerald-600"
               >
@@ -174,12 +192,16 @@ export function AdminPanel() {
               <DollarSign className="h-4 w-4" />
               <span>Manage Entry Fee</span>
             </CardTitle>
-            <CardDescription>Change the entry fee for new drafts</CardDescription>
+            <CardDescription>
+              Change the entry fee for new drafts
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleChangeEntryFee} className="space-y-4">
               <div>
-                <Label htmlFor="newEntryFee" className="text-gray-300">New Entry Fee (CHZ)</Label>
+                <Label htmlFor="newEntryFee" className="text-gray-300">
+                  New Entry Fee (CHZ)
+                </Label>
                 <Input
                   id="newEntryFee"
                   type="number"
@@ -191,8 +213,8 @@ export function AdminPanel() {
                   className="bg-gray-700 border-gray-600 text-white"
                 />
               </div>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 disabled={changeEntryFeeMutation.isPending}
                 className="w-full bg-blue-600 hover:bg-blue-700"
               >
@@ -217,7 +239,9 @@ export function AdminPanel() {
             <Wallet className="h-4 w-4" />
             <span>Platform Revenue</span>
           </CardTitle>
-          <CardDescription>View and withdraw accumulated platform revenue</CardDescription>
+          <CardDescription>
+            View and withdraw accumulated platform revenue
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="bg-slate-800 p-4 rounded-lg">
@@ -231,10 +255,13 @@ export function AdminPanel() {
               <DollarSign className="h-8 w-8 text-green-500" />
             </div>
           </div>
-          
-          <Button 
+
+          <Button
             onClick={handleWithdrawRevenue}
-            disabled={withdrawRevenueMutation.isPending || parseFloat(platformRevenue) <= 0}
+            disabled={
+              withdrawRevenueMutation.isPending ||
+              parseFloat(platformRevenue) <= 0
+            }
             className="w-full bg-green-600 hover:bg-green-700"
           >
             {withdrawRevenueMutation.isPending ? (

@@ -13,7 +13,7 @@ export const CONTRACT_ABI = [
   "function getDraftName(uint256 draftId) view returns (string)",
   "function getAllDraftNames() view returns (string[])",
   "function totalWins(address) view returns (uint256)",
-  "function createDraft(string memory draftName, uint256 durationSeconds)",
+  "function createDraft(uint256 durationSeconds)",
   "function joinDraft(uint256 draftId, uint256[] memory selectedPlayers) payable",
   "function resolveDraft(uint256 draftId, address winner, uint256 score)",
   "function getParticipants(uint256 draftId) view returns (address[])",
