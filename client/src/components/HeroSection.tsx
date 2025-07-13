@@ -32,12 +32,12 @@ export function HeroSection() {
           
           <p className="text-xl md:text-2xl text-slate-300 mb-8 max-w-3xl mx-auto leading-relaxed">
             The ultimate <span className="text-accent-green font-semibold">decentralized fantasy football</span> platform. 
-            Create your dream team, compete with others, and win <span className="text-accent-blue font-semibold">CHZ tokens</span> on the Chiliz blockchain.
+            Create your dream team, compete with others, and win <span className="text-accent-blue font-semibold">UMI tokens</span> on the Umi blockchain.
           </p>
           
           <div className="flex justify-center space-x-2 mb-12">
             <div className="px-4 py-2 bg-accent-green/20 rounded-full text-accent-green font-semibold text-sm">
-              🔥 Live on Chiliz
+              🔥 Live on Umi
             </div>
             <div className="px-4 py-2 bg-accent-blue/20 rounded-full text-accent-blue font-semibold text-sm">
               ⚡ Instant Rewards
@@ -54,7 +54,7 @@ export function HeroSection() {
               <Target className="h-8 w-8 text-white" />
             </div>
             <h3 className="text-xl font-bold text-slate-50 mb-3">Compete & Conquer</h3>
-            <p className="text-slate-400 leading-relaxed">Join exclusive drafts and battle for massive CHZ token prizes in our skill-based tournaments</p>
+            <p className="text-slate-400 leading-relaxed">Join exclusive drafts and battle for massive UMI token prizes in our skill-based tournaments</p>
           </div>
           
           <div className="draft-card p-6 rounded-2xl text-center hover-lift">
@@ -62,7 +62,7 @@ export function HeroSection() {
               <Zap className="h-8 w-8 text-white" />
             </div>
             <h3 className="text-xl font-bold text-slate-50 mb-3">Blockchain Powered</h3>
-            <p className="text-slate-400 leading-relaxed">100% transparent and secure smart contracts on Chiliz network with instant payouts</p>
+            <p className="text-slate-400 leading-relaxed">100% transparent and secure smart contracts on Umi network with instant payouts</p>
           </div>
           
           <div className="draft-card p-6 rounded-2xl text-center hover-lift">

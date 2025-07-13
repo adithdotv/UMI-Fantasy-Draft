@@ -53,7 +53,7 @@ export function UserStatsShare() {
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-slate-50">{userStats.totalEarnings.toFixed(1)}</div>
-              <div className="text-xs text-slate-400">CHZ</div>
+              <div className="text-xs text-slate-400">UMI</div>
             </div>
             <div className="text-center">
               <div className="text-2xl font-bold text-slate-50">{userStats.gamesPlayed}</div>

@@ -1,7 +1,7 @@
 import { Calendar, Trophy, Medal, Users, DollarSign } from 'lucide-react';
 import { useActiveDrafts, useUserWins, usePlatformRevenue, useTotalUniqueParticipants, useContractOwner } from '@/hooks/useContract';
 import { useWallet } from '@/hooks/useWallet';
-import { formatChzAmount } from '@/lib/web3';
+import { formatUMIAmount } from '@/lib/web3';
 
 export function DraftStats() {
   const { account, isConnected } = useWallet();
@@ -15,8 +15,8 @@ export function DraftStats() {
     account.toLowerCase() === contractOwner.toLowerCase();
 
   const totalPrizePool = activeDrafts.reduce((sum, draft) => {
-    const poolInChz = parseFloat(formatChzAmount(draft.totalPool.toString()));
-    return sum + poolInChz;
+    const poolInUMI = parseFloat(formatUMIAmount(draft.totalPool.toString()));
+    return sum + poolInUMI;
   }, 0);
 
   return (
@@ -49,7 +49,7 @@ export function DraftStats() {
         </div>
         <div>
           <p className="text-slate-400 text-sm font-medium">Total Prize Pool</p>
-          <p className="text-xs text-yellow-500 font-semibold">CHZ rewards</p>
+          <p className="text-xs text-yellow-500 font-semibold">UMI rewards</p>
         </div>
       </div>
       
@@ -100,7 +100,7 @@ export function DraftStats() {
           </div>
           <div>
             <p className="text-slate-400 text-sm font-medium">Platform Revenue</p>
-            <p className="text-xs text-accent-purple font-semibold">CHZ earnings</p>
+            <p className="text-xs text-accent-purple font-semibold">UMI earnings</p>
           </div>
         </div>
       )}

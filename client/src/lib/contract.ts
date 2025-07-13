@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { getSigner, getProvider } from './web3';
 
-export const CONTRACT_ADDRESS = '0xcb4626a80F60b713525192862191881e4Daf2CD8';
+export const CONTRACT_ADDRESS = '0xBc4F353FfdC4677f7A9CE157c35bf341d343aACa';
 
 export const CONTRACT_ABI = [
   "function owner() view returns (address)",
@@ -163,9 +163,9 @@ export class FanDraftContract {
     return tx.hash;
   }
 
-  async changeEntryFee(newFeeInChz: string): Promise<string> {
+  async changeEntryFee(newFeeInUMI: string): Promise<string> {
     const contract = await this.getContract(true);
-    const tx = await contract.changeEntryFee(ethers.parseEther(newFeeInChz));
+    const tx = await contract.changeEntryFee(ethers.parseEther(newFeeInUMI));
     await tx.wait();
     return tx.hash;
   }

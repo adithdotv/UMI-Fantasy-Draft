@@ -82,7 +82,7 @@ export function AdminPanel() {
     onSuccess: () => {
       toast({
         title: "Revenue Withdrawn",
-        description: `Successfully withdrew ${parseFloat(platformRevenue).toFixed(2)} CHZ`,
+        description: `Successfully withdrew ${parseFloat(platformRevenue).toFixed(2)} UMI`,
       });
       queryClient.invalidateQueries({ queryKey: ["platformRevenue"] });
     },
@@ -200,7 +200,7 @@ export function AdminPanel() {
             <form onSubmit={handleChangeEntryFee} className="space-y-4">
               <div>
                 <Label htmlFor="newEntryFee" className="text-gray-300">
-                  New Entry Fee (CHZ)
+                  New Entry Fee (UMI)
                 </Label>
                 <Input
                   id="newEntryFee"
@@ -249,7 +249,7 @@ export function AdminPanel() {
               <div>
                 <p className="text-slate-400 text-sm">Available Revenue</p>
                 <p className="text-2xl font-bold text-slate-50">
-                  {parseFloat(platformRevenue).toFixed(1)} CHZ
+                  {parseFloat(platformRevenue).toFixed(1)} UMI
                 </p>
               </div>
               <DollarSign className="h-8 w-8 text-green-500" />

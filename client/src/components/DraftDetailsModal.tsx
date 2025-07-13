@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Eye, Users, Trophy, ChevronDown, ChevronUp } from 'lucide-react';
-import { formatChzAmount } from '@/lib/web3';
+import { formatUMIAmount } from '@/lib/web3';
 import { useDraftParticipants, usePlayerSelection } from '@/hooks/useContract';
 import { useWallet } from '@/hooks/useWallet';
 import { useQuery } from '@tanstack/react-query';
@@ -74,7 +74,7 @@ export function DraftDetailsModal({ isOpen, onClose, draftId, totalPool }: Draft
               {totalPool && (
                 <div className="flex items-center space-x-2">
                   <Trophy className="h-4 w-4 text-yellow-500" />
-                  <span className="text-sm text-gray-300">Pool: {formatChzAmount(totalPool.toString())} CHZ</span>
+                  <span className="text-sm text-gray-300">Pool: {formatUMIAmount(totalPool.toString())} UMI</span>
                 </div>
               )}
             </div>

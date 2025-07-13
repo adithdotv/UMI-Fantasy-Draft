@@ -2,7 +2,7 @@
 
 ## Overview
 
-FanDraft is a blockchain-based fantasy football platform built on the Chiliz testnet. It allows users to create fantasy teams, participate in drafts, and win CHZ token rewards through smart contract-powered tournaments. The application combines traditional fantasy sports gameplay with decentralized blockchain technology to ensure transparent and fair competition.
+FanDraft is a blockchain-based fantasy football platform built on the UMI Devnet. It allows users to create fantasy teams, participate in drafts, and win UMI token rewards through smart contract-powered tournaments. The application combines traditional fantasy sports gameplay with decentralized blockchain technology to ensure transparent and fair competition.
 
 ## System Architecture
 
@@ -30,9 +30,9 @@ FanDraft is a blockchain-based fantasy football platform built on the Chiliz tes
 ## Key Components
 
 ### Smart Contract Integration
-- **Blockchain**: Chiliz testnet (Chain ID: 88882)
+- **Blockchain**: UMI Devnet (Chain ID: 88882)
 - **Contract Address**: `0x7388FfE07dd833a65f6b1D38B9bF398612e96d0c`
-- **Token**: CHZ (native Chiliz token)
+- **Token**: UMI (native Umi token)
 - **Features**: Draft creation, player selection, automatic prize distribution
 
 ### Database Schema
@@ -47,7 +47,7 @@ FanDraft is a blockchain-based fantasy football platform built on the Chiliz tes
 - **Player Selection Modal**: Interactive team building interface
 - **Draft Cards**: Tournament display with real-time countdown timers
 - **Leaderboard**: Rankings and user performance metrics
-- **Wallet Integration**: MetaMask connection and CHZ balance display
+- **Wallet Integration**: MetaMask connection and UMI balance display
 
 ## Data Flow
 
@@ -56,13 +56,13 @@ FanDraft is a blockchain-based fantasy football platform built on the Chiliz tes
 3. **Team Selection**: Interactive modal for choosing players by position
 4. **Blockchain Transaction**: Entry fee payment and team submission via smart contract
 5. **Real-time Updates**: Live draft statistics and countdown timers
-6. **Prize Distribution**: Automatic CHZ rewards based on performance
+6. **Prize Distribution**: Automatic UMI rewards based on performance
 
 ## External Dependencies
 
 ### Blockchain Dependencies
 - **MetaMask**: Required wallet for user authentication
-- **Chiliz Network**: Testnet for smart contract deployment
+- **Umi Network**: Testnet for smart contract deployment
 - **Ethers.js**: Blockchain interaction library
 
 ### UI/UX Dependencies
@@ -82,7 +82,7 @@ FanDraft is a blockchain-based fantasy football platform built on the Chiliz tes
 - **Frontend**: Vite dev server on port 5000
 - **Backend**: TSX execution with hot reload
 - **Database**: Local PostgreSQL or Neon connection
-- **Blockchain**: Chiliz testnet for testing
+- **Blockchain**: UMI Devnet for testing
 
 ### Production Deployment
 - **Platform**: Replit autoscale deployment
@@ -98,7 +98,7 @@ FanDraft is a blockchain-based fantasy football platform built on the Chiliz tes
 ## Changelog
 
 - June 25, 2025: Initial setup with complete fantasy football platform
-- June 25, 2025: Fixed Chiliz testnet chain ID to 88882 and improved wallet connection error handling
+- June 25, 2025: Fixed UMI Devnet chain ID to 88882 and improved wallet connection error handling
 - June 25, 2025: Added owner-only admin panel for creating drafts, managing entry fees, and withdrawing revenue
 - June 25, 2025: Updated smart contract address to 0xFA81A5b5a9e0ebe9194d45b47ad553EE05AeEBD7
 - June 25, 2025: Updated contract interface to use new getDraft function with participants and winners data
@@ -110,7 +110,7 @@ FanDraft is a blockchain-based fantasy football platform built on the Chiliz tes
 - June 25, 2025: Enhanced DraftDetailsModal with expandable participant cards showing player selections, current user pinning, and fixed React Query enabled property
 - June 25, 2025: Updated to new contract address 0xBae9f72f75624d27933d8cf85FE4b5C305cee2c5 with single winner resolution system
 - June 25, 2025: Updated leaderboard to use real blockchain data from smart contract with current user "You" tag
-- June 25, 2025: Added platform revenue tracking showing accumulated CHZ balance in smart contract
+- June 25, 2025: Added platform revenue tracking showing accumulated UMI balance in smart contract
 - June 25, 2025: Updated admin panel to display platform revenue with withdraw button, removed separate revenue management section
 - June 25, 2025: Removed draft name field from entire application, drafts now display as "Draft #ID" format
 - June 25, 2025: Updated total players stat to use real blockchain data from unique participants across all drafts instead of mock storage data

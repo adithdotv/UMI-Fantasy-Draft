@@ -6,15 +6,15 @@ declare global {
   }
 }
 
-export const CHILIZ_TESTNET_CONFIG = {
+export const Umi_TESTNET_CONFIG = {
   chainId: '0x15b32', // 88882 in hex
-  chainName: 'Chiliz Testnet',
+  chainName: 'UMI Devnet',
   nativeCurrency: {
-    name: 'CHZ',
-    symbol: 'CHZ',
+    name: 'UMI',
+    symbol: 'UMI',
     decimals: 18,
   },
-  rpcUrls: ['https://spicy-rpc.chiliz.com/'],
+  rpcUrls: ['https://spicy-rpc.Umi.com/'],
   blockExplorerUrls: ['https://testnet.chiliscan.com/'],
 };
 
@@ -38,12 +38,12 @@ export async function connectWallet(): Promise<string | null> {
       method: 'eth_chainId',
     });
 
-    // If not on Chiliz testnet, try to switch
-    if (currentChainId !== CHILIZ_TESTNET_CONFIG.chainId) {
+    // If not on UMI Devnet, try to switch
+    if (currentChainId !== Umi_TESTNET_CONFIG.chainId) {
       try {
         await window.ethereum.request({
           method: 'wallet_switchEthereumChain',
-          params: [{ chainId: CHILIZ_TESTNET_CONFIG.chainId }],
+          params: [{ chainId: Umi_TESTNET_CONFIG.chainId }],
         });
       } catch (switchError: any) {
         // Chain not added to MetaMask (error code 4902)
@@ -51,18 +51,18 @@ export async function connectWallet(): Promise<string | null> {
           try {
             await window.ethereum.request({
               method: 'wallet_addEthereumChain',
-              params: [CHILIZ_TESTNET_CONFIG],
+              params: [Umi_TESTNET_CONFIG],
             });
           } catch (addError: any) {
-            console.error('Failed to add Chiliz testnet:', addError);
-            throw new Error('Failed to add Chiliz testnet to MetaMask. Please add it manually.');
+            console.error('Failed to add UMI Devnet:', addError);
+            throw new Error('Failed to add UMI Devnet to MetaMask. Please add it manually.');
           }
         } else if (switchError.code === 4001) {
           // User rejected the request
-          throw new Error('Please switch to Chiliz testnet to continue.');
+          throw new Error('Please switch to UMI Devnet to continue.');
         } else {
           console.error('Failed to switch network:', switchError);
-          throw new Error('Failed to switch to Chiliz testnet. Please switch manually.');
+          throw new Error('Failed to switch to UMI Devnet. Please switch manually.');
         }
       }
     }
@@ -96,10 +96,10 @@ export async function getBalance(address: string): Promise<string> {
   return ethers.formatEther(balance);
 }
 
-export function formatChzAmount(wei: string): string {
+export function formatUMIAmount(wei: string): string {
   return parseFloat(ethers.formatEther(wei)).toFixed(2);
 }
 
-export function parseChzAmount(chz: string): bigint {
-  return ethers.parseEther(chz);
+export function parseUMIAmount(UMI: string): bigint {
+  return ethers.parseEther(UMI);
 }

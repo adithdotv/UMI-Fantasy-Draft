@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useWallet } from '@/hooks/useWallet';
 import { useQuery } from '@tanstack/react-query';
 import { fanDraftContract } from '@/lib/contract';
-import { formatChzAmount } from '@/lib/web3';
+import { formatUMIAmount } from '@/lib/web3';
 import { CountdownTimer } from './CountdownTimer';
 import { DraftDetailsModal } from './DraftDetailsModal';
 
@@ -156,7 +156,7 @@ export function MyHistory() {
                     <div>
                       <p className="text-slate-400 text-sm">Prize Pool</p>
                       <p className="text-lg font-semibold text-slate-50">
-                        {parseFloat(formatChzAmount(draft.totalPool.toString())).toFixed(2)} CHZ
+                        {parseFloat(formatUMIAmount(draft.totalPool.toString())).toFixed(2)} UMI
                       </p>
                     </div>
                     <div>

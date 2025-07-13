@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Plus, Eye, Edit, Check, Trophy, Clock } from 'lucide-react';
 import { useDraftParticipants, usePlayerSelection, useEntryFee, useContractOwner } from '@/hooks/useContract';
 import { useWallet } from '@/hooks/useWallet';
-import { formatChzAmount } from '@/lib/web3';
+import { formatUMIAmount } from '@/lib/web3';
 
 interface DraftCardProps {
   draft: ContractDraft;
@@ -23,7 +23,7 @@ export function DraftCard({ draft, onJoinDraft, onViewDraft, onEditLineup, onRes
   const { data: contractOwner } = useContractOwner();
   
   const hasJoined = account && participants.includes(account);
-  const prizePool = formatChzAmount(draft.totalPool.toString());
+  const prizePool = formatUMIAmount(draft.totalPool.toString());
   const isOwner = account && contractOwner && account.toLowerCase() === contractOwner.toLowerCase();
   const now = Math.floor(Date.now() / 1000);
   const isExpired = now > Number(draft.deadline);
@@ -54,11 +54,11 @@ export function DraftCard({ draft, onJoinDraft, onViewDraft, onEditLineup, onRes
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
           <p className="text-slate-400 text-sm">Entry Fee</p>
-          <p className="text-lg font-semibold text-slate-50">{entryFee} CHZ</p>
+          <p className="text-lg font-semibold text-slate-50">{entryFee} UMI</p>
         </div>
         <div>
           <p className="text-slate-400 text-sm">Prize Pool</p>
-          <p className="text-lg font-semibold text-yellow-500">{prizePool} CHZ</p>
+          <p className="text-lg font-semibold text-yellow-500">{prizePool} UMI</p>
         </div>
         <div>
           <p className="text-slate-400 text-sm">Participants</p>

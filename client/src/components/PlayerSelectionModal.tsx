@@ -271,7 +271,7 @@ export function PlayerSelectionModal({ isOpen, onClose, draftId }: PlayerSelecti
               disabled={selectedPlayers.length !== 11 || joinDraftMutation.isPending}
               className="bg-accent-green hover:bg-emerald-600 text-white"
             >
-              {joinDraftMutation.isPending ? 'Joining...' : `Join Draft (${entryFee} CHZ)`}
+              {joinDraftMutation.isPending ? 'Joining...' : `Join Draft (${entryFee} UMI)`}
             </Button>
           </div>
         </div>

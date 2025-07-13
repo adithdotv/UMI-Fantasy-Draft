@@ -32,11 +32,11 @@ export function SocialShare({ playerStats, children }: SocialShareProps) {
     const rank = playerStats.rank ? `#${playerStats.rank} on` : 'Playing on';
     return `🏆 ${rank} FanDraft leaderboard!
 ⚽ ${playerStats.totalWins} wins in ${playerStats.gamesPlayed} games
-💰 ${playerStats.totalEarnings.toFixed(2)} CHZ earned
+💰 ${playerStats.totalEarnings.toFixed(2)} UMI earned
 📈 ${playerStats.winRate}% win rate
 
-Join me in Premier League fantasy tournaments on the Chiliz blockchain! 
-#FanDraft #SportFi #Chiliz #FantasyFootball`;
+Join me in Premier League fantasy tournaments on the Umi blockchain! 
+#FanDraft #SportFi #Umi #FantasyFootball`;
   };
 
   const shareData = {
@@ -130,7 +130,7 @@ Join me in Premier League fantasy tournaments on the Chiliz blockchain!
               <div className="bg-slate-700/50 border border-slate-600 p-4 rounded-xl text-center">
                 <DollarSign className="h-6 w-6 text-accent-green mx-auto mb-2" />
                 <div className="text-2xl font-black text-slate-50">{playerStats.totalEarnings.toFixed(1)}</div>
-                <div className="text-xs text-slate-400">CHZ Earned</div>
+                <div className="text-xs text-slate-400">UMI Earned</div>
               </div>
               
               <div className="bg-slate-700/50 border border-slate-600 p-4 rounded-xl text-center">
@@ -148,7 +148,7 @@ Join me in Premier League fantasy tournaments on the Chiliz blockchain!
 
             <div className="mt-4 text-center">
               <p className="text-xs text-slate-500">
-                🔥 SportFi on Chiliz Blockchain
+                🔥 SportFi on Umi Blockchain
               </p>
             </div>
           </div>

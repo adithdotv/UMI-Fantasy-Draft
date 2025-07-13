@@ -46,7 +46,7 @@ export function Header() {
             </div>
             <div className="hidden md:block">
               <span className="text-sm stat-card px-3 py-1 rounded-full text-slate-400 font-medium">
-                Chiliz Testnet
+                Umi Devnet
               </span>
             </div>
           </div>
@@ -68,7 +68,7 @@ export function Header() {
               <div className="hidden md:flex items-center space-x-2 stat-card px-4 py-2 rounded-xl">
                 <div className="w-2 h-2 bg-accent-green rounded-full animate-pulse"></div>
                 <div>
-                  <span className="text-xs text-slate-400">CHZ Balance</span>
+                  <span className="text-xs text-slate-400">ETH Balance</span>
                   <div className="text-sm font-bold text-slate-50">
                     {balance}
                   </div>

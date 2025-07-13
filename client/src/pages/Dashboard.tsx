@@ -45,7 +45,7 @@ export function Dashboard() {
                 <span className="text-xl font-bold text-slate-50">FanDraft</span>
               </div>
               <p className="text-slate-400 text-sm">
-                Decentralized fantasy football on Chiliz blockchain. Fair, transparent, and rewarding.
+                Decentralized fantasy football on UMI blockchain. Fair, transparent, and rewarding.
               </p>
             </div>
             <div>
@@ -67,15 +67,15 @@ export function Dashboard() {
             <div>
               <h4 className="text-slate-50 font-semibold mb-3">Contract Info</h4>
               <div className="text-sm">
-                <p className="text-slate-400 mb-2">Chiliz Testnet</p>
+                <p className="text-slate-400 mb-2">Umi Devnet</p>
                 <p className="text-xs bg-slate-800 p-2 rounded font-mono text-slate-300 break-all">
-                  0x7388FfE07dd833a65f6b1D38B9bF398612e96d0c
+                  0xBc4F353FfdC4677f7A9CE157c35bf341d343aACa
                 </p>
               </div>
             </div>
           </div>
           <div className="border-t border-slate-700 mt-8 pt-6 text-center">
-            <p className="text-slate-400 text-sm">© 2024 FanDraft. Built on Chiliz blockchain.</p>
+            <p className="text-slate-400 text-sm">© 2025 FanDraft. Built on Umi blockchain.</p>
           </div>
         </div>
       </footer>
